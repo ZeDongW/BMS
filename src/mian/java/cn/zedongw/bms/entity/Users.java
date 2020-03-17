@@ -1,4 +1,4 @@
-package com.wzd.entity;
+package cn.zedongw.bms.entity;
 
 import java.util.Objects;
 
@@ -11,8 +11,16 @@ import java.util.Objects;
  * @date ：Created in 2019/01/22/0022 22:37
  */
 public class Users {
-    private String userName; //用户名
-    private String password; //密码
+
+    /**
+     * 用户名
+     */
+    private String userName;
+
+    /**
+     * 密码
+     */
+    private String password;
 
     public Users() {
     }
@@ -40,8 +48,12 @@ public class Users {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Users users = (Users) o;
         return userName.equals(users.userName);
     }

@@ -1,4 +1,4 @@
-package com.wzd.entity;
+package cn.zedongw.bms.entity;
 
 import java.util.Date;
 import java.util.Objects;
@@ -12,12 +12,35 @@ import java.util.Objects;
  * @date ：Created in 2019/01/22/0022 22:44
  */
 public class Books {
-    private String bookName;        //书名
-    private String bookAuthor;      //作者
-    private String publisher;       //出版社
-    private double price;           //价格
-    private int bookNum;            //书号
-    private Date publishDate;       //出版日期
+    /**
+     * 书名
+     */
+    private String bookName;
+
+    /**
+     * 作者
+     */
+    private String bookAuthor;
+
+    /**
+     * 出版社
+     */
+    private String publisher;
+
+    /**
+     * 价格
+     */
+    private double price;
+
+    /**
+     * 书号
+     */
+    private int bookNum;
+
+    /**
+     * 出版日期
+     */
+    private Date publishDate;
 
     public Books() {
     }
@@ -81,8 +104,12 @@ public class Books {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Books books = (Books) o;
         return bookNum == books.bookNum &&
                 bookName.equals(books.bookName) &&

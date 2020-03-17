@@ -1,10 +1,10 @@
-package com.wzd.bms;
+package cn.zedongw.bms.app;
 
-import com.wzd.comparator.ComparatorByAuthor;
-import com.wzd.comparator.ComparatorByPrice;
-import com.wzd.comparator.ComparatorByPublishDate;
-import com.wzd.entity.Books;
-import com.wzd.entity.Users;
+import cn.zedongw.bms.utils.comparator.ComparatorByAuthor;
+import cn.zedongw.bms.utils.comparator.ComparatorByPrice;
+import cn.zedongw.bms.utils.comparator.ComparatorByPublishDate;
+import cn.zedongw.bms.entity.Books;
+import cn.zedongw.bms.entity.Users;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,12 +13,12 @@ import java.util.*;
 /**
  * @author ：ZeDongW
  * @version : 1.0
- * @ClassName : BMS
+ * @ClassName : BookManagerSystem
  * @description：图书管理系统
  * @modified By：
  * @date ：Created in 2019/01/23/0023 7:06
  */
-public class BMS {
+public class BookManagerSystem {
     public void app(HashSet<Users> users, ArrayList<Books> books, SimpleDateFormat sdf, Scanner sc) {
         //用户名正则
         String nameReg = "^[a-zA-Z0-9]{2,16}$";
@@ -34,7 +34,8 @@ public class BMS {
             System.out.println("*                                                   *");
             System.out.println("*****************************************************");
             System.out.println("请选择功能： 用户登录(A)  注册用户(B)  退出系统(Q)");
-            String operate = sc.next().toUpperCase();   //获取用户操作，同一转成大写
+            //获取用户操作，统一转成大写
+            String operate = sc.next().toUpperCase();
 
             switch (operate) {
                 case "A":
@@ -47,6 +48,7 @@ public class BMS {
                     System.out.println("正在退出……");
                     System.out.println("退出成功，欢迎下次登录");
                     System.exit(0);
+                    break;
                 default:
                     System.out.println("您选择的功能不存在，请重新输入……");
             }
@@ -63,8 +65,8 @@ public class BMS {
      */
     private void register(HashSet<Users> users, SimpleDateFormat sdf, Scanner sc, String nameReg, String passReg) {
         System.out.println("您选择了注册用户功能……");
-
-        Users user = new Users();//用户
+        //用户
+        Users user = new Users();
         while (true) {
             System.out.println("请输入用户名(用户名由字母数字组成2~16位)……");
             String userName = sc.next();

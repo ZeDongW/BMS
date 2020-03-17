@@ -1,6 +1,6 @@
-package com.wzd.comparator;
+package cn.zedongw.bms.utils.comparator;
 
-import com.wzd.entity.Books;
+import cn.zedongw.bms.entity.Books;
 
 import java.util.Comparator;
 
