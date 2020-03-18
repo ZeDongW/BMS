@@ -11,23 +11,15 @@ import java.util.Objects;
  * @date ：Created in 2019/01/22/0022 22:37
  */
 public class Users {
-
-    /**
-     * 用户名
-     */
-    private String userName;
-
-    /**
-     * 密码
-     */
-    private String password;
+    private String userName; //用户名
+    private String passWord; //密码
 
     public Users() {
     }
 
-    public Users(String userName, String password) {
+    public Users(String userName, String passWord) {
         this.userName = userName;
-        this.password = password;
+        this.passWord = passWord;
     }
 
     public String getUserName() {
@@ -38,12 +30,12 @@ public class Users {
         this.userName = userName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPassWord() {
+        return passWord;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassWord(String password) {
+        this.passWord = password;
     }
 
     @Override
@@ -67,7 +59,7 @@ public class Users {
     public String toString() {
         return "Users{" +
                 "userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
+                ", password='" + passWord + '\'' +
                 '}';
     }
 }

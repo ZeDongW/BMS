@@ -1,5 +1,7 @@
 package cn.zedongw.bms.entity;
 
+import cn.zedongw.bms.utils.MyDateUtils;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -12,35 +14,12 @@ import java.util.Objects;
  * @date ：Created in 2019/01/22/0022 22:44
  */
 public class Books {
-    /**
-     * 书名
-     */
-    private String bookName;
-
-    /**
-     * 作者
-     */
-    private String bookAuthor;
-
-    /**
-     * 出版社
-     */
-    private String publisher;
-
-    /**
-     * 价格
-     */
-    private double price;
-
-    /**
-     * 书号
-     */
-    private int bookNum;
-
-    /**
-     * 出版日期
-     */
-    private Date publishDate;
+    private String bookName;        //书名
+    private String bookAuthor;      //作者
+    private String publisher;       //出版社
+    private double price;           //价格
+    private int bookNum;            //书号
+    private Date publishDate;       //出版日期
 
     public Books() {
     }
@@ -131,7 +110,7 @@ public class Books {
                 ", publisher='" + publisher + '\'' +
                 ", price=" + price +
                 ", bookNum=" + bookNum +
-                ", publishDate=" + publishDate +
+                ", publishDate=" + MyDateUtils.dateToStr(publishDate) +
                 '}';
     }
 }
