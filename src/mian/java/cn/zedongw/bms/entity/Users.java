@@ -13,6 +13,11 @@ import java.util.Objects;
 public class Users {
 
     /**
+     * id
+     */
+    private String id;
+
+    /**
      * 用户名
      */
     private String userName;
@@ -25,9 +30,26 @@ public class Users {
     public Users() {
     }
 
-    public Users(String userName, String passWord) {
-        this.userName = userName;
-        this.passWord = passWord;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Users users = (Users) o;
+        return Objects.equals(userName, users.userName) &&
+                Objects.equals(passWord, users.passWord);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userName, passWord);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserName() {
@@ -42,32 +64,22 @@ public class Users {
         return passWord;
     }
 
-    public void setPassWord(String password) {
-        this.passWord = password;
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Users users = (Users) o;
-        return userName.equals(users.userName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(userName);
+    public Users(String id, String userName, String passWord) {
+        this.id = id;
+        this.userName = userName;
+        this.passWord = passWord;
     }
 
     @Override
     public String toString() {
         return "Users{" +
-                "userName='" + userName + '\'' +
-                ", password='" + passWord + '\'' +
+                "id='" + id + '\'' +
+                ", userName='" + userName + '\'' +
+                ", passWord='" + passWord + '\'' +
                 '}';
     }
 }

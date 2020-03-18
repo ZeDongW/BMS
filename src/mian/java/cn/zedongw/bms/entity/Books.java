@@ -1,8 +1,5 @@
 package cn.zedongw.bms.entity;
 
-import cn.zedongw.bms.utils.MyDateUtils;
-
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -14,6 +11,12 @@ import java.util.Objects;
  * @date ：Created in 2019/01/22/0022 22:44
  */
 public class Books {
+
+    /**
+     * id
+     */
+    private String id;
+
     /**
      * 书名
      */
@@ -42,18 +45,27 @@ public class Books {
     /**
      * 出版日期
      */
-    private Date publishDate;
+    private String publishDate;
 
     public Books() {
     }
 
-    public Books(String bookName, String bookAuthor, String publisher, Double price, int bookNum, Date publishDate) {
+    public Books(String id, String bookName, String bookAuthor, String publisher, double price, int bookNum, String publishDate) {
+        this.id = id;
         this.bookName = bookName;
         this.bookAuthor = bookAuthor;
         this.publisher = publisher;
         this.price = price;
         this.bookNum = bookNum;
         this.publishDate = publishDate;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getBookName() {
@@ -96,11 +108,11 @@ public class Books {
         this.bookNum = bookNum;
     }
 
-    public Date getPublishDate() {
+    public String getPublishDate() {
         return publishDate;
     }
 
-    public void setPublishDate(Date publishDate) {
+    public void setPublishDate(String publishDate) {
         this.publishDate = publishDate;
     }
 
@@ -113,27 +125,29 @@ public class Books {
             return false;
         }
         Books books = (Books) o;
-        return bookNum == books.bookNum &&
-                bookName.equals(books.bookName) &&
-                bookAuthor.equals(books.bookAuthor) &&
-                publisher.equals(books.publisher) &&
-                publishDate.equals(books.publishDate);
+        return Double.compare(books.price, price) == 0 &&
+                bookNum == books.bookNum &&
+                Objects.equals(bookName, books.bookName) &&
+                Objects.equals(bookAuthor, books.bookAuthor) &&
+                Objects.equals(publisher, books.publisher) &&
+                Objects.equals(publishDate, books.publishDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bookName, bookAuthor, publisher, bookNum, publishDate);
+        return Objects.hash(bookName, bookAuthor, publisher, price, bookNum, publishDate);
     }
 
     @Override
     public String toString() {
         return "Books{" +
-                "bookName='" + bookName + '\'' +
+                "id='" + id + '\'' +
+                ", bookName='" + bookName + '\'' +
                 ", bookAuthor='" + bookAuthor + '\'' +
                 ", publisher='" + publisher + '\'' +
                 ", price=" + price +
                 ", bookNum=" + bookNum +
-                ", publishDate=" + MyDateUtils.dateToStr(publishDate) +
+                ", publishDate='" + publishDate + '\'' +
                 '}';
     }
 }

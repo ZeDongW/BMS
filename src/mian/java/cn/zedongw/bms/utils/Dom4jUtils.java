@@ -1,4 +1,5 @@
 package cn.zedongw.bms.utils;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -8,14 +9,13 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @Author ZeDongW
@@ -31,7 +31,6 @@ public class Dom4jUtils {
 
     private static String className = null;
     private static String name = null;
-    private static String path = null;
     private static Document dom = null;
     private static Element rootElement = null;
     private static String xPath = null;
@@ -46,45 +45,9 @@ public class Dom4jUtils {
     public static <T> Document loadXml(Class<T> obj) throws DocumentException {
         className = obj.getName();
         name = className.substring(className.lastIndexOf(".") + 1);
-        path = name + ".xml";
-        return new SAXReader().read(Dom4jUtils.class.getClassLoader().getResourceAsStream(path));
-    }
+        String path = name + ".xml";
 
-    /**
-     * @Author: ZeDongW
-     * @Description: 解析文档，将文档中的内容封装为对象，以list返回
-     * @Date: 2019/4/19 0019 19:31
-     * @Param: [obj]
-     * @return: java.util.ArrayList<T>
-     */
-    public static <T> ArrayList<T>  getList(Class<T> obj) throws DocumentException, IllegalAccessException, InstantiationException, ParseException {
-        ArrayList<T> lists = new ArrayList<T>();
-        dom = loadXml(obj);
-        rootElement= dom.getRootElement();
-        xPath = rootElement.getName() + "/*";
-        List<Element> list = dom.selectNodes(xPath);
-        for (Element element : list) {
-            T t = obj.newInstance();
-            Field[] fields = obj.getDeclaredFields();
-            List<Element> elements = element.elements();
-            for(int i = 0; i < elements.size(); i++){
-                Field field = fields[i];
-                Class<?> type = field.getType();
-                field.setAccessible(true);
-                String value = elements.get(i).getText();
-                if(double.class.equals(type)){
-                    field.set(t,Double.parseDouble(value));
-                } else if(int.class.equals(type)) {
-                    field.set(t,Integer.parseInt(value));
-                } else if(Date.class.equals(type)){
-                    field.set(t,MyDateUtils.strToDate(value));
-                } else {
-                    field.set(t,value);
-                }
-            }
-            lists.add(t);
-        }
-        return lists;
+        return new SAXReader().read(Dom4jUtils.class.getClassLoader().getResourceAsStream(path));
     }
 
     /**
@@ -93,18 +56,18 @@ public class Dom4jUtils {
      * @Date: 2019/4/20 0020 6:40
      * @Param: [obj, dom]
      * @return: void
-     */ 
+     */
     public static <T> void writeXml (Class<T> obj, Document dom){
         className = obj.getName();
         name = className.substring(className.lastIndexOf(".") + 1);
-        path = name + ".xml";
+        String path = name + ".xml";
         if(dom == null){
             dom = DocumentHelper.createDocument();
             Element element = dom.addElement(name);
         }
         BufferedWriter bufferedWriter = null;
         try {
-            bufferedWriter = new BufferedWriter(new FileWriter(new File(Dom4jUtils.class.getClassLoader().getResource(path).getFile())));
+            bufferedWriter = new BufferedWriter(new FileWriter(Dom4jUtils.class.getClassLoader().getResource(path).getFile()));
             OutputFormat prettyPrint = OutputFormat.createPrettyPrint();
             prettyPrint.setEncoding("UTF-8");
             XMLWriter xmlWriter = new XMLWriter(bufferedWriter, prettyPrint);
@@ -119,32 +82,24 @@ public class Dom4jUtils {
             }
         }
     }
-    
+
     /**
      * @Author: ZeDongW
      * @Description: 增加Xml对象
      * @Date: 2019/4/20 0020 6:43
      * @Param: [obj, dom]
      * @return: void
-     */ 
-    public static <T> void addElement(T t, Document dom) throws IllegalAccessException {
+     */
+    public static <T> void addElement(T t, String id) throws IllegalAccessException, DocumentException {
         Class clazz = t.getClass();
         className = clazz.getName();
         name = className.substring(className.lastIndexOf(".") + 1);
+        dom = loadXml(clazz);
         rootElement = dom.getRootElement();
-        Element element = rootElement.addElement(name);
-        Field[] declaredFields = clazz.getDeclaredFields();
-        for (Field declaredField : declaredFields) {
-            declaredField.setAccessible(true);
-            String field = declaredField.getName();
-            Element ele = element.addElement(field);
-            Class<?> type = declaredField.getType();
-            if(Date.class.equals(type)){
-                ele.setText(MyDateUtils.dateToStr((Date)declaredField.get(t)));
-            } else {
-                ele.setText(String.valueOf(declaredField.get(t)));
-            }
-        }
+        Element element = rootElement.addElement(name.substring(0,name.length()-1));
+        element.addAttribute("id",id);
+        getElement(t, clazz, element);
+        writeXml(clazz, dom);
     }
 
     /**
@@ -154,33 +109,136 @@ public class Dom4jUtils {
      * @Param: [t, dom]
      * @return: void
      */
-    public static <T> void removeElement(T t, Document dom) throws IllegalAccessException {
+    public static <T> void removeElement(Class<T> obj, String id) throws IllegalAccessException, DocumentException {
+        className = obj.getName();
+        name = className.substring(className.lastIndexOf(".") + 1);
+        Field[] declaredFields = obj.getDeclaredFields();
+        xPath = "//"+name.substring(0,name.length()-1)+"[@id='" + id + "']";
+        dom = loadXml(obj);
+        Element element = (Element)dom.selectSingleNode(xPath);
+        if(element != null){
+            element.detach();
+        }
+        writeXml(obj, dom);
+    }
+
+    /**
+     * @Author: ZeDongW
+     * @Description: 根据ID修改元素
+     * @Date: 2019/5/5 0005 7:03
+     * @Param: [obj, id]
+     * @return: void
+     */
+    public static <T> void updateElement(T t, String id) throws DocumentException, IllegalAccessException {
         Class clazz = t.getClass();
         className = clazz.getName();
         name = className.substring(className.lastIndexOf(".") + 1);
         Field[] declaredFields = clazz.getDeclaredFields();
-        xPath = "//name";
+        xPath = "//"+name.substring(0,name.length()-1)+"[@id='" + id + "']";
+        dom = loadXml(clazz);
+        Element element = (Element)dom.selectSingleNode(xPath);
+        getElement(t, clazz, element);
+        writeXml(clazz, dom);
+    }
+
+    /**
+     * @Author: ZeDongW
+     * @Description: 解析文档，将文档中的内容封装为对象，以list返回
+     * @Date: 2019/4/19 0019 19:31
+     * @Param: [obj]
+     * @return: java.util.ArrayList<T>
+     */
+    public static <T> ArrayList<T>  findAll(Class<T> obj) throws DocumentException, IllegalAccessException, InstantiationException, ParseException {
+        ArrayList<T> lists = new ArrayList<T>();
+        dom = loadXml(obj);
+        rootElement= dom.getRootElement();
+        xPath = rootElement.getName() + "/*";
         List<Element> list = dom.selectNodes(xPath);
-        boolean flag = true;
         for (Element element : list) {
-            List<Element> elements = element.elements();
-            for(int i = 0; i < declaredFields.length; i ++){
-                Field field = declaredFields[i];
-                Class<?> type = field.getType();
-                String value = null;
-                if(Date.class.equals(type)){
-                    value = MyDateUtils.dateToStr((Date)field.get(t));
-                } else {
-                    value = String.valueOf(field.get(t));
-                }
-                if(value.equals(elements.get(i).getText())){
-                    flag = false;
-                    break;
-                }
+            T t = getObj(obj, element);
+            lists.add(t);
+        }
+        return lists;
+    }
+
+    /**
+     * @Author: ZeDongW
+     * @Description: 跟根据id查找元素，并返回
+     * @Date: 2019/5/5 0005 6:43
+     * @Param: [t, id]
+     * @return: T
+     */
+    public static <T> T findElementById(Class<T> obj, String id) throws DocumentException, IllegalAccessException, InstantiationException {
+        className = obj.getName();
+        name = className.substring(className.lastIndexOf(".") + 1);
+        Field[] declaredFields = obj.getDeclaredFields();
+        xPath = "//"+name.substring(0,name.length()-1)+"[@id='" + id + "']";
+        dom = loadXml(obj);
+        Element element = (Element)dom.selectSingleNode(xPath);
+        if(element == null){
+            return null;
+        }
+        T t = getObj(obj, element);
+        return t;
+    }
+
+    /**
+     * @Author: ZeDongW
+     * @Description: 获取UUID
+     * @Date: 2019/5/5 0005 6:54
+     * @Param: []
+     * @return: java.lang.String
+     */
+    public static String getUuid(){
+        return UUID.randomUUID().toString().replace("-","");
+    }
+
+    /**
+     * @Author: ZeDongW
+     * @Description: 将元素封装为对象
+     * @Date: 2019/5/5 0005 6:55
+     * @Param: [obj, element]
+     * @return: T
+     */
+    private static <T> T getObj(Class<T> obj, Element element) throws InstantiationException, IllegalAccessException {
+        T t = obj.newInstance();
+        Field[] fields = obj.getDeclaredFields();
+        List<Element> elements = element.elements();
+        for(int i = 0; i < elements.size(); i++){
+            Field field = fields[i];
+            Class<?> type = field.getType();
+            field.setAccessible(true);
+            String value = elements.get(i).getText();
+            if(double.class.equals(type)){
+                field.set(t,Double.parseDouble(value));
+            } else if(int.class.equals(type)) {
+                field.set(t,Integer.parseInt(value));
+            } else {
+                field.set(t,value);
             }
-            if(flag){
-                element.detach();
+        }
+        return t;
+    }
+
+    /**
+     * @Author: ZeDongW
+     * @Description: 将对象封装为element
+     * @Date: 2019/5/5 0005 7:09
+     * @Param: [t, clazz, element]
+     * @return: void
+     */
+    private static <T> void getElement(T t, Class clazz, Element element) throws IllegalAccessException {
+        Field[] declaredFields = clazz.getDeclaredFields();
+        for (Field declaredField : declaredFields) {
+            declaredField.setAccessible(true);
+            String field = declaredField.getName();
+            Element element1 = element.element(field);
+            if (element1 !=null){
+                element1.detach();
             }
+            Element ele = element.addElement(field);
+            Class<?> type = declaredField.getType();
+            ele.setText(String.valueOf(declaredField.get(t)));
         }
     }
 }
