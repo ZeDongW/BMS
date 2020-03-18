@@ -11,8 +11,16 @@ import java.util.Objects;
  * @date ：Created in 2019/01/22/0022 22:37
  */
 public class Users {
-    private String userName; //用户名
-    private String passWord; //密码
+
+    /**
+     * 用户名
+     */
+    private String userName;
+
+    /**
+     * 密码
+     */
+    private String passWord;
 
     public Users() {
     }

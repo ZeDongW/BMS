@@ -27,8 +27,10 @@ public class Application {
         Document domBooks = Dom4jUtils.loadXml(Books.class);
         Scanner sc = new Scanner(System.in);
         try {
-            ArrayList<Users> users = Dom4jUtils.getList(Users.class); //存储用户的list
-            ArrayList<Books> books = Dom4jUtils.getList(Books.class); //存储书本的list
+            //存储用户的list
+            ArrayList<Users> users = Dom4jUtils.getList(Users.class);
+            //存储书本的list
+            ArrayList<Books> books = Dom4jUtils.getList(Books.class);
             Users admin = new Users("admin", "123456");
             if (!users.contains(admin)) {
                 Dom4jUtils.addElement(admin, domUsers);

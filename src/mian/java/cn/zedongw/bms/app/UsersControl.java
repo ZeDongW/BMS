@@ -44,7 +44,9 @@ public class UsersControl {
             System.out.println("*                                                   *");
             System.out.println("*****************************************************");
             System.out.println("请选择功能： 用户登录(A)  注册用户(B)  退出系统(Q)");
-            String operate = sc.nextLine().toUpperCase();   //获取用户操作，同一转成大写
+
+            //获取用户操作，统一转成大写
+            String operate = sc.nextLine().toUpperCase();
             switch (operate) {
                 case "A":
                     login(users, books, domUsers, domBooks, sc);
@@ -78,7 +80,8 @@ public class UsersControl {
             System.out.println("修改用户名(E) 修改密码(F) " + s + s1);
             System.out.println("查看所有用户(I) 注销(Q)");
             System.out.println("请输入您选择的功能：");
-            String operate = sc.nextLine().toUpperCase();   //获取用户操作，同一转成大写
+            //获取用户操作，统一转成大写
+            String operate = sc.nextLine().toUpperCase();
             switch (operate) {
                 case "A":
                     System.out.println("您选择了查看图书功能");
@@ -152,7 +155,8 @@ public class UsersControl {
         Users user = new Users();
         while (true) {
             System.out.println("请输入用户名：");
-            String userName = sc.nextLine();   //获取用户名
+            //获取用户名
+            String userName = sc.nextLine();
             if ("Q".equals(userName.toUpperCase())) {
                 System.out.println("返回上一级");
                 return;
@@ -161,7 +165,8 @@ public class UsersControl {
             if (users.contains(user)) {
                 while (true) {
                     System.out.println("请输入密码：");
-                    String password = sc.nextLine();   //获取密码
+                    //获取密码
+                    String password = sc.nextLine();
                     for (Users user1 : users) {
                         if (user1.getUserName().equals(userName)) {
                             if (user1.getPassWord().equals(password)) {
@@ -193,10 +198,12 @@ public class UsersControl {
      */
     public void register(ArrayList<Users> users, Document domUsers, Scanner sc) throws IllegalAccessException, IOException {
         System.out.println("您选择了注册用户功能……");
-        Users user = new Users();//用户
+        //用户
+        Users user = new Users();
         while (true) {
             System.out.println("请输入用户名(用户名由字母数字组成2~16位)……");
-            String userName = sc.nextLine();   //获取用户名
+            //获取用户名
+            String userName = sc.nextLine();
             if (userName.matches(GlobalContants.NAME_REG)) {
                 user.setUserName(userName);
                 if (!users.contains(user)) {
