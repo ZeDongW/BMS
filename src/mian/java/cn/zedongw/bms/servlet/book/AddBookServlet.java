@@ -15,7 +15,7 @@ import java.io.IOException;
 
 /**
  * @Author ZeDongW
- * @ClassName AddBookServlet
+ * @ClassName addBookServlet
  * @Description 添加书本
  * @Version 1.0
  * @date ：Created in 2019/5/12 0012 23:10
@@ -49,10 +49,10 @@ public class AddBookServlet extends HttpServlet {
                 }
                 resp.sendRedirect(req.getContextPath() + "/books");
             } else {
-                resp.sendRedirect(req.getContextPath() + "/index.html");
+                resp.sendRedirect(req.getContextPath() + "/login.jsp");
             }
         } else {
-            resp.sendRedirect(req.getContextPath() + "/index.html");
+            resp.sendRedirect(req.getContextPath() + "/login.jsp");
         }
     }
 

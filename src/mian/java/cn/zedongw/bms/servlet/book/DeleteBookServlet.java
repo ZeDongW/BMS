@@ -43,10 +43,10 @@ public class DeleteBookServlet extends HttpServlet {
                 }
                 resp.sendRedirect(req.getContextPath() + "/books");
             } else {
-                resp.sendRedirect(req.getContextPath() + "/index.html");
+                resp.sendRedirect(req.getContextPath() + "/login.jsp");
             }
         } else {
-            resp.sendRedirect(req.getContextPath() + "/index.html");
+            resp.sendRedirect(req.getContextPath() + "/login.jsp");
         }
     }
 

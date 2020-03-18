@@ -27,12 +27,12 @@ public class LogOutServlet extends HttpServlet {
             if(id != null){
                 session.removeAttribute("id");
                 resp.getWriter().write("安全退出成功，3秒后返回登录页面");
-                resp.setHeader("refresh","3;url= " + req.getContextPath() + "/index.html”");
+                resp.setHeader("refresh","3;url= " + req.getContextPath() + "/login.jsp”");
             } else {
-                resp.sendRedirect(req.getContextPath() + "/index.html");
+                resp.sendRedirect(req.getContextPath() + "/login.jsp");
             }
         } else {
-            resp.sendRedirect(req.getContextPath() + "/index.html");
+            resp.sendRedirect(req.getContextPath() + "/login.jsp");
         }
     }
 

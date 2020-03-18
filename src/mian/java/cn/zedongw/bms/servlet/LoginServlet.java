@@ -1,6 +1,5 @@
 package cn.zedongw.bms.servlet;
 
-
 import cn.zedongw.bms.dao.Dao;
 import cn.zedongw.bms.dao.impl.DaoImpl;
 import cn.zedongw.bms.entity.Users;
@@ -44,17 +43,16 @@ public class LoginServlet extends HttpServlet {
                             HttpSession session = req.getSession();
                             session.setAttribute("id",user1.getId());
                             resp.sendRedirect(req.getContextPath() + "/index");
-                            return;
                         } else {
                             resp.getWriter().write("密码错误，请输入正确密码，3秒后返回注册页面");
-                            resp.setHeader("refresh","3;url= " + req.getContextPath() + "/index.html”");
+                            resp.setHeader("refresh","3;url= " + req.getContextPath() + "/login.jsp”");
                             return;
                         }
                     }
                 }
             } else {
                 resp.getWriter().write("该用户名不存在，请输入正确用户名，3秒后返回注册页面");
-                resp.setHeader("refresh","3;url= " + req.getContextPath() + "/index.html”");
+                resp.setHeader("refresh","3;url= " + req.getContextPath() + "/login.jsp”");
                 return;
             }
         } catch (ParseException e) {

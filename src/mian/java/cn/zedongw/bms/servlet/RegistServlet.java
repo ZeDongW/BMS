@@ -37,14 +37,14 @@ public class RegistServlet extends HttpServlet {
             ArrayList<Users> usersList = usersDao.findAll(new Users());
             if(usersList.contains(user)){
                 resp.getWriter().write("该用户名已被注册，请重新注册，3秒后返回注册页面");
-                resp.setHeader("refresh","3;url= " + req.getContextPath() + "/index.html”");
+                resp.setHeader("refresh","3;url= " + req.getContextPath() + "/login.jsp”");
                 return;
             } else {
                 usersDao.add(user, uuid);
                 resp.getWriter().write("注册成功，3秒后返回登录页面");
-                resp.setHeader("refresh","3;url= " + req.getContextPath() + "/index.html”");
+                resp.setHeader("refresh","3;url= " + req.getContextPath() + "/login.jsp”");
             }
-        } catch ( ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
             e.printStackTrace();

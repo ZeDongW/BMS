@@ -1,19 +1,20 @@
-<%@page language="java" pageEncoding="UTF-8" %>
+<%--
+  Created by IntelliJ IDEA.
+  User: ZeDongW
+  Date: 2019/5/23 0023
+  Time: 23:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" import="cn.zedongw.bms.entity.*" %>
 <html>
 <head>
-    <title>图书管理系统</title>
-
+    <title>登录成功</title>
 </head>
-<%--<body>
-<center>
-    <h2>欢迎来到图书管理系统</h2>
-        用户名：<input type="text" name="userName" onblur="checkUserName()" id="userName"><span id="userNameCheck"></span><br>
-        密&nbsp;&nbsp;&nbsp;码：<input type="password" name="passWord" onblur="checkPassWord()" id="passWord"><span id="passWordCheck"></span><br>
-        <input type="submit" onclick='arr("/BMS_WEB/regist")' value="注册">
-        <input type="submit" onclick='arr("/BMS_WEB/login")' value="登录" >
-    </form>
-</center>
-
+<body>
+    <center>
+        欢迎登陆， <font size='+2' color='green'>${user.userName}</font><br />
+        <a href='${pageContext.request.contextPath}/users'>用户管理</a> <a href='${pageContext.request.contextPath}/books'>书本管理</a> <br />
+        <a href='${pageContext.request.contextPath}/queryUser?id="+ user.getId()+"'>用户修改</a> <a href='${pageContext.request.contextPath}/logOut'>安全退出</a>
+    </center>
 </body>
-<script type="text/javascript" src="js/checkUser.js" ></script>--%>
 </html>

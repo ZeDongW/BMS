@@ -44,10 +44,10 @@ public class UpdateUserServlet extends HttpServlet {
                 }
                 resp.sendRedirect(req.getContextPath() + "/users");
             } else {
-                resp.sendRedirect(req.getContextPath() + "/index.html");
+                resp.sendRedirect(req.getContextPath() + "/login.jsp");
             }
         } else {
-            resp.sendRedirect(req.getContextPath() + "/index.html");
+            resp.sendRedirect(req.getContextPath() + "/login.jsp");
         }
     }
 
