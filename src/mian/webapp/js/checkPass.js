@@ -1,7 +1,6 @@
-const passId = document.getElementById("passWordCheck");
-const confirmPassWordId = document.getElementById("confirmPassWordId");
-
 function checkPass() {
+
+    const passId = document.getElementById("passWordCheck");
     const passWord = document.getElementById("passWord").value;
     const reg = /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/i;
     if (reg.test(passWord)) {
@@ -14,9 +13,10 @@ function checkPass() {
 }
 
 function confirmPass() {
+    const confirmPassWordId = document.getElementById("confirmPassWordId");
     const confirmPassWord = document.getElementById("confirmPassWord").value;
     const passWord = document.getElementById("passWord").value;
-    if (confirmPassWord.valueOf() == passWord.valueOf()) {
+    if (confirmPassWord.valueOf() === passWord.valueOf()) {
         confirmPassWordId.innerHTML = "";
         return true;
     } else {
@@ -26,11 +26,5 @@ function confirmPass() {
 }
 
 function checkForm() {
-    const passWord = checkPass();
-    const confirmPassWord = confirmPass();
-    if (passWord && confirmPassWord) {
-        return true;
-    } else {
-        return false;
-    }
+    return checkPass() && confirmPass();
 }

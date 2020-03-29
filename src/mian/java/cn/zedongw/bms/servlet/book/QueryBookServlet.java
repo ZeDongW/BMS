@@ -25,8 +25,8 @@ public class QueryBookServlet extends BaseServlet {
      *
      * @param req  1
      * @param resp 2
-     * @throws ServletException
-     * @throws IOException
+     * @Throws ServletException
+     * @Throws IOException
      * @methodName: doProcess
      * @return: void
      * @author: ZeDongW
@@ -41,7 +41,7 @@ public class QueryBookServlet extends BaseServlet {
         String id = req.getParameter("id");
 
         //声明书本对象
-        Books book = null;
+        Books book;
 
         //书本ID不为空
         if(id != null){
@@ -57,10 +57,5 @@ public class QueryBookServlet extends BaseServlet {
 
         //转发到查询书本页面
         req.getRequestDispatcher("WEB-INF/page/queryBook.jsp").forward(req, resp);
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doProcess(req, resp);
     }
 }
