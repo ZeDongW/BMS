@@ -7,7 +7,7 @@ import java.util.Objects;
  * @author ：ZeDongW
  * @version : 1.0
  * @ClassName : Books
- * @description：图书管理系统书本实体类
+ * @description： 图书管理系统书本实体类
  * @modified By：
  * @date ：Created in 2019/01/22/0022 22:44
  */
