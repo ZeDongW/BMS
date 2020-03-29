@@ -2,6 +2,7 @@ const priceId = document.getElementById("priceCheck");
 const bookNumId = document.getElementById("bookNumCheck");
 const publishDateId = document.getElementById("publishDateCheck");
 
+
 function checkPrice() {
     const price = document.getElementById("price").value;
     const reg = /^\d+(\.\d*)?|\.\d+$/i;

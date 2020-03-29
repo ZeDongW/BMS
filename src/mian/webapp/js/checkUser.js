@@ -1,6 +1,7 @@
 const userId = document.getElementById("userNameCheck");
 const passId = document.getElementById("passWordCheck");
 
+
 function arr(value) {
     const form = document.getElementById("form");
     form.setAttribute("action", value)
