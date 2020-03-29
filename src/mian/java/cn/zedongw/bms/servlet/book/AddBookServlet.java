@@ -4,8 +4,8 @@ import cn.zedongw.bms.entity.Books;
 import cn.zedongw.bms.service.IBooksService;
 import cn.zedongw.bms.service.impl.BooksServiceImpl;
 import cn.zedongw.bms.servlet.BaseServlet;
-import cn.zedongw.bms.utils.BooksUtils;
 import cn.zedongw.bms.utils.IDUtils;
+import cn.zedongw.bms.utils.beanutil.BooksUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +41,7 @@ public class AddBookServlet extends BaseServlet {
         IBooksService service = new BooksServiceImpl();
 
         //封装书本对象
-        Books book = BooksUtils.setBook(req, IDUtils.getUuid());
+        Books book = BooksUtil.getBean(req, IDUtils.getUuid());
 
         //新增书本
         service.addBooks(book);

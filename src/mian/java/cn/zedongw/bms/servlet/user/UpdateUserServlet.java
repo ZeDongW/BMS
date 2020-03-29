@@ -4,7 +4,7 @@ import cn.zedongw.bms.entity.Users;
 import cn.zedongw.bms.service.IUsersService;
 import cn.zedongw.bms.service.impl.UsersServiceImpl;
 import cn.zedongw.bms.servlet.BaseServlet;
-import cn.zedongw.bms.utils.UsersUtils;
+import cn.zedongw.bms.utils.beanutil.UsersUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +42,7 @@ public class UpdateUserServlet extends BaseServlet {
         String id = req.getParameter("id");
 
         //封装用户对象
-        Users user = UsersUtils.setUser(req, id);
+        Users user = UsersUtil.getBean(req, id);
 
         //更新用户
         service.updateUsers(user);

@@ -4,7 +4,7 @@ import cn.zedongw.bms.entity.Users;
 import cn.zedongw.bms.service.IUsersService;
 import cn.zedongw.bms.service.impl.UsersServiceImpl;
 import cn.zedongw.bms.utils.IDUtils;
-import cn.zedongw.bms.utils.UsersUtils;
+import cn.zedongw.bms.utils.beanutil.UsersUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -38,7 +38,7 @@ public class RegistServlet extends HttpServlet {
         IUsersService service = new UsersServiceImpl();
 
         //封装User对象
-        Users user = UsersUtils.setUser(req, IDUtils.getUuid());
+        Users user = UsersUtil.getBean(req, IDUtils.getUuid());
 
         //查看用户名是否存在
         if (service.userNameExists(user.getUserName())){

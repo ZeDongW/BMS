@@ -3,7 +3,7 @@ package cn.zedongw.bms.dao.impl;
 import cn.zedongw.bms.dao.IUsersDao;
 import cn.zedongw.bms.entity.Users;
 import cn.zedongw.bms.utils.DbUtils;
-import cn.zedongw.bms.utils.UsersUtils;
+import cn.zedongw.bms.utils.beanutil.UsersUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -87,9 +87,7 @@ public class UsersDaoImpl implements IUsersDao {
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
             while (rs.next()){
-                Users user = new Users();
-                UsersUtils.getUser(user, rs);
-                list.add(user);
+                list.add(UsersUtil.getBean(rs));
             }
             return list;
         } catch (SQLException e) {
@@ -102,7 +100,6 @@ public class UsersDaoImpl implements IUsersDao {
 
     @Override
     public Users findById(String id) {
-        Users user = new Users();
         try {
             conn = DbUtils.getConnection();
             sql = "select * from users where id =?";
@@ -110,9 +107,9 @@ public class UsersDaoImpl implements IUsersDao {
             pstmt.setString(1, id);
             rs = pstmt.executeQuery();
             if (rs.next()){
-                UsersUtils.getUser(user, rs);
+                return UsersUtil.getBean(rs);
             }
-            return user;
+            return null;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -123,9 +120,6 @@ public class UsersDaoImpl implements IUsersDao {
 
     @Override
     public Users findByUnAndPwd(String userName, String passWord){
-
-        //Users用户对象
-        Users user = new Users();
 
         try {
 
@@ -139,8 +133,7 @@ public class UsersDaoImpl implements IUsersDao {
             pstmt.setString(2, passWord);
             rs = pstmt.executeQuery();
             if (rs.next()){
-                UsersUtils.getUser(user, rs);
-                return user;
+                return UsersUtil.getBean(rs);
             } else{
                 return null;
             }

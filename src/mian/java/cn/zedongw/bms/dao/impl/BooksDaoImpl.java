@@ -2,8 +2,8 @@ package cn.zedongw.bms.dao.impl;
 
 import cn.zedongw.bms.dao.IBooksDao;
 import cn.zedongw.bms.entity.Books;
-import cn.zedongw.bms.utils.BooksUtils;
 import cn.zedongw.bms.utils.DbUtils;
+import cn.zedongw.bms.utils.beanutil.BooksUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -97,9 +97,7 @@ public class BooksDaoImpl implements IBooksDao {
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
             while (rs.next()){
-                Books book = new Books();
-                BooksUtils.getBook(book, rs);
-                list.add(book);
+                list.add(BooksUtil.getBean(rs));
             }
             return list;
         } catch (SQLException e) {
@@ -113,7 +111,6 @@ public class BooksDaoImpl implements IBooksDao {
 
     @Override
     public Books findById(String id) {
-        Books book = new Books();
         try {
             conn = DbUtils.getConnection();
             sql = "select * from books where id =?";
@@ -121,9 +118,9 @@ public class BooksDaoImpl implements IBooksDao {
             pstmt.setString(1, id);
             rs = pstmt.executeQuery();
             if (rs.next()){
-                BooksUtils.getBook(book, rs);
+                return BooksUtil.getBean(rs);
             }
-            return book;
+            return null;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
