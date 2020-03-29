@@ -54,11 +54,11 @@ public class QueryBookServlet extends HttpServlet {
                     }
                     html += "</head>";
                     html += "<body>";
-                    html += "<center>欢迎登陆， <font size='+2' color='green'> " + user.getUserName() + " </font><br />";
+                    html += "<div style='text-align: center'>欢迎登陆， <font size='+2' color='green'> " + user.getUserName() + " </font><br />";
                     if(id != null){
-                        html += "    <h3>修改书本</h3></center>";
+                        html += "    <h3>修改书本</h3></div>";
                     } else {
-                        html += "    <h3>添加书本</h3></center>";
+                        html += "    <h3>添加书本</h3></div>";
                     }
                     html += "<form action=' " + req.getContextPath();
                     if(id != null){
@@ -130,7 +130,7 @@ public class QueryBookServlet extends HttpServlet {
                     html += "        </tr>";
                     html += "    </table>";
                     html += "</form>";
-                    html += "<center><a href='" + req.getContextPath() + "/index'>返回主页</a>&nbsp;&nbsp;&nbsp;<a href=' " + req.getContextPath() + "/queryUser?id="+user.getId()+"'>用户修改</a>&nbsp;&nbsp;&nbsp;<a href='" + req.getContextPath() + "/logOut'>安全退出</a></center>";
+                    html += "<div style='text-align: center'><a href='" + req.getContextPath() + "/index'>返回主页</a>&nbsp;&nbsp;&nbsp;<a href=' " + req.getContextPath() + "/queryUser?id="+user.getId()+"'>用户修改</a>&nbsp;&nbsp;&nbsp;<a href='" + req.getContextPath() + "/logOut'>安全退出</a></div>";
                     html += "</body>";
                     html += "<script type='text/javascript' src='js/checkBook.js' ></script>";
                     html += "</html>";

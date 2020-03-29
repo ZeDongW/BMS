@@ -58,8 +58,8 @@ public class UsersServlet extends HttpServlet {
                     html += "    </style>";
                     html += "</head>";
                     html += "<body>";
-                    html +="<center>    欢迎登陆， <font size='+2' color='green'> " + user.getUserName() + " </font><br />";
-                    html += "<h3>用户管理</h3></center>";
+                    html +="<div style='text-align: center'>    欢迎登陆， <font size='+2' color='green'> " + user.getUserName() + " </font><br />";
+                    html += "<h3>用户管理</h3></div>";
                     html += "<table align='center' border='1' width='800px'>";
                     html += "    <tr>";
                     html += "        <th><a href='" + req.getContextPath() + "/users?sort=" + "userId" + "'>编号</a></th>";
@@ -89,7 +89,7 @@ public class UsersServlet extends HttpServlet {
                     }
 
                     html += "</table>";
-                    html +=" <center><a href='" + req.getContextPath() + "/index'>返回主页</a>&nbsp;&nbsp;&nbsp;<a href=' " + req.getContextPath() + "/queryUser?id="+user.getId()+"'>用户修改</a>&nbsp;&nbsp;&nbsp;<a href=' " + req.getContextPath() + "/logOut'>安全退出</a></center>";
+                    html +=" <div style='text-align: center'><a href='" + req.getContextPath() + "/index'>返回主页</a>&nbsp;&nbsp;&nbsp;<a href=' " + req.getContextPath() + "/queryUser?id="+user.getId()+"'>用户修改</a>&nbsp;&nbsp;&nbsp;<a href=' " + req.getContextPath() + "/logOut'>安全退出</a></div>";
                     html += "</body>";
                     html += "</html>";
 
