@@ -1,16 +1,13 @@
 package cn.zedongw.bms.servlet.book;
 
-import cn.zedongw.bms.dao.Dao;
-import cn.zedongw.bms.dao.impl.DaoImpl;
 import cn.zedongw.bms.entity.Books;
-import cn.zedongw.bms.entity.Users;
-import org.dom4j.DocumentException;
+import cn.zedongw.bms.service.IBooksService;
+import cn.zedongw.bms.service.impl.BooksServiceImpl;
+import cn.zedongw.bms.servlet.BaseServlet;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -22,45 +19,43 @@ import java.io.IOException;
  * @modified By：
  */
 
-public class QueryBookServlet extends HttpServlet {
+public class QueryBookServlet extends BaseServlet {
+    /**
+     * Description: servlet业务逻辑处理
+     *
+     * @param req  1
+     * @param resp 2
+     * @throws ServletException
+     * @throws IOException
+     * @methodName: doProcess
+     * @return: void
+     * @author: ZeDongW
+     * @date: 2020/3/29 0029 9:51
+     */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("utf-8");
-        resp.setContentType("text/html;charset=utf-8");
-        HttpSession session = req.getSession();
-        if(session != null){
-            String id1 = (String)session.getAttribute("id");
-            if(id1 != null){
-                Dao<Users> usersDao = new DaoImpl<Users>();
-                Dao<Books> booksDao = new DaoImpl<Books>();
-                String id = req.getParameter("id");
-                try {
-                    Users user = usersDao.findById(new Users(), id1);
-                    Books book = null;
-                    if(id != null){
-                        book = booksDao.findById(new Books(), id);
-                    } else {
-                        book = new Books();
-                    }
-                    req.setAttribute("book", book);
-                    req.getRequestDispatcher("queryBook.jsp").forward(req, resp);
-                } catch (DocumentException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                resp.sendRedirect(req.getContextPath() + "/login.jsp");
-            }
-        } else {
-            resp.sendRedirect(req.getContextPath() + "/login.jsp");
-        }
-    }
+    public void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //实例化书本业务逻辑层
+        IBooksService sercice = new BooksServiceImpl();
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+        //获取书本ID
+        String id = req.getParameter("id");
+
+        //声明书本对象
+        Books book = null;
+
+        //书本ID不为空
+        if(id != null){
+            //根据ID查找书本
+            book = sercice.findBooksById(id);
+        } else {
+            //书本ID为空，初始化书本对象
+            book = new Books();
+        }
+
+        //将书本对象封装到request中
+        req.setAttribute("book", book);
+
+        //转发到查询书本页面
+        req.getRequestDispatcher("WEB-INF/page/queryBook.jsp").forward(req, resp);
     }
 }

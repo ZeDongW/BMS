@@ -1,0 +1,1 @@
+create database bms default character set utf8;

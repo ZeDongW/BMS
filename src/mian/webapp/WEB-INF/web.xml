@@ -5,19 +5,19 @@
          version="4.0">
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>cn.zedongw.bms.servlet.LoginServlet</servlet-class>
+        <servlet-class>cn.zedongw.bms.servlet.user.LoginServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RegistServlet</servlet-name>
-        <servlet-class>cn.zedongw.bms.servlet.RegistServlet</servlet-class>
+        <servlet-class>cn.zedongw.bms.servlet.user.RegistServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>IndexServlet</servlet-name>
-        <servlet-class>cn.zedongw.bms.servlet.IndexServlet</servlet-class>
+        <servlet-class>cn.zedongw.bms.servlet.user.IndexServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LogOutServlet</servlet-name>
-        <servlet-class>cn.zedongw.bms.servlet.LogOutServlet</servlet-class>
+        <servlet-class>cn.zedongw.bms.servlet.user.LogOutServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UsersServlet</servlet-name>
@@ -110,6 +110,6 @@
     </servlet-mapping>
 
     <welcome-file-list>
-        <welcome-file>login.jsp</welcome-file>
+        <welcome-file>/WEB-INF/page/login.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

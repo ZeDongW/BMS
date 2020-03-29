@@ -20,18 +20,19 @@
     </style>
 </head>
 <body>
-    <center>欢迎登陆， <font size='+2' color='green'>${user.userName}</font><br />
+    <jsp:include page="../pub/head.jsp"></jsp:include>
+    <div style="text-align: center">
         <h3>用户管理</h3>
-    </center>
+    </div>
     <table align='center' border='1' width='800px'>
         <tr>
             <th><a href='${pageContext.request.contextPath}/users?sort=userId'>编号</a></th>
             <th><a href='${pageContext.request.contextPath}/users?sort=userName'>用户名</a></th>
         <c:choose>
-            <c:when test="${'admin' eq user.userName}">
+            <c:when test="${'admin' eq loginUser.userName}">
                     <th>操作</th>
                 </tr>
-                <c:forEach items="${list}" var="user">
+                <c:forEach items="${usersList}" var="user">
                     <tr>
                         <td>${user.id}</td>
                         <td>${user.userName}</td>
@@ -41,7 +42,7 @@
             </c:when>
             <c:otherwise>
                 </tr>
-                <c:forEach items="${list}" var="user">
+                <c:forEach items="${usersList}" var="user">
                     <tr>
                         <td>${user.id}</td>
                         <td>${user.userName}</td>
@@ -50,8 +51,6 @@
             </c:otherwise>
         </c:choose>
     </table>
-    <center>
-        <a href='${pageContext.request.contextPath}/index'>返回主页</a>&nbsp;&nbsp;&nbsp;<a href='${pageContext.request.contextPath}/queryUser?id=${user.id}'>用户修改</a>&nbsp;&nbsp;&nbsp;<a href='${pageContext.request.contextPath}/logOut'>安全退出</a>
-    </center>
+    <jsp:include page="../pub/foot.jsp"></jsp:include>
 </body>
 </html>

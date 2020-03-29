@@ -1,15 +1,14 @@
 package cn.zedongw.bms.servlet.user;
 
-import cn.zedongw.bms.dao.Dao;
-import cn.zedongw.bms.dao.impl.DaoImpl;
 import cn.zedongw.bms.entity.Users;
-import org.dom4j.DocumentException;
+import cn.zedongw.bms.service.IUsersService;
+import cn.zedongw.bms.service.impl.UsersServiceImpl;
+import cn.zedongw.bms.servlet.BaseServlet;
+import cn.zedongw.bms.utils.UsersUtils;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -21,38 +20,34 @@ import java.io.IOException;
  * @modified By：
  */
 
-public class UpdateUserServlet extends HttpServlet {
+public class UpdateUserServlet extends BaseServlet {
+    /**
+     * Description: servlet业务逻辑处理
+     *
+     * @param req  1
+     * @param resp 2
+     * @throws ServletException
+     * @throws IOException
+     * @methodName: doProcess
+     * @return: void
+     * @author: ZeDongW
+     * @date: 2020/3/29 0029 9:51
+     */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("utf-8");
-        resp.setContentType("text/html;charset=utf-8");
-        HttpSession session = req.getSession();
-        if(session != null){
-            String id1 = (String)session.getAttribute("id");
-            if(id1 != null){
-                Dao<Users> usersDao = new DaoImpl<Users>();
-                String id = req.getParameter("id");
-                String userName = req.getParameter("userName");
-                String passWord = req.getParameter("passWord");
-                Users user = new Users(id,userName,passWord);
-                try {
-                    usersDao.update(user, id);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (DocumentException e) {
-                    e.printStackTrace();
-                }
-                resp.sendRedirect(req.getContextPath() + "/users");
-            } else {
-                resp.sendRedirect(req.getContextPath() + "/login.jsp");
-            }
-        } else {
-            resp.sendRedirect(req.getContextPath() + "/login.jsp");
-        }
-    }
+    public void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //实例化用户业务逻辑层
+        IUsersService service = new UsersServiceImpl();
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
+        //获取用户ID
+        String id = req.getParameter("id");
+
+        //封装用户对象
+        Users user = UsersUtils.setUser(req, id);
+
+        //更新用户
+        service.updateUsers(user);
+
+        //重定向到用户页面
+        resp.sendRedirect(req.getContextPath() + "/users");
     }
 }

@@ -20,10 +20,10 @@
     </style>
 </head>
 <body>
-    <center>
-        欢迎登陆， <font size='+2' color='green'>${user.userName}</font><br />
+    <jsp:include page="../pub/head.jsp"></jsp:include>
+    <div style="text-align: center">
         <h3>书本管理</h3>
-    </center>
+    </div>
     <table align='center' border='1' width='800px'>
         <tr>
             <th><a href='${pageContext.request.contextPath}/books?sort=bookId'>编号</a></th>
@@ -35,7 +35,7 @@
             <th><a href='${pageContext.request.contextPath}/books?sort=bookPublishDate'>出版日期</a></th>
             <th>操作</th>
         </tr>
-        <c:forEach items="${list}" var="book">
+        <c:forEach items="${booksList}" var="book">
             <tr>
                 <td>${book.id}</td>
                 <td>${book.bookName}</td>
@@ -51,6 +51,6 @@
             <td colspan='8' align='center'><a href='${pageContext.request.contextPath}/queryBook'>添加书本</a></td>
         </tr>
     </table>
-    <center><a href='${pageContext.request.contextPath}/index'>返回主页</a>&nbsp;&nbsp;&nbsp;<a href='${pageContext.request.contextPath}/queryUser?id=${user.id}'>用户修改</a>&nbsp;&nbsp;&nbsp;<a href='${pageContext.request.contextPath}/logOut'>安全退出</a></center>
+    <jsp:include page="../pub/foot.jsp"></jsp:include>
 </body>
 </html>

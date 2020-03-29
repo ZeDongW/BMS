@@ -11,10 +11,10 @@
     <title>登录成功</title>
 </head>
 <body>
-    <center>
-        欢迎登陆， <font size='+2' color='green'>${user.userName}</font><br />
+    <jsp:include page="../pub/head.jsp"></jsp:include>
+    <div style="text-align: center">
         <a href='${pageContext.request.contextPath}/users'>用户管理</a> <a href='${pageContext.request.contextPath}/books'>书本管理</a> <br />
-        <a href='${pageContext.request.contextPath}/queryUser?id="+ user.getId()+"'>用户修改</a> <a href='${pageContext.request.contextPath}/logOut'>安全退出</a>
-    </center>
+        <a href='${pageContext.request.contextPath}/queryUser?id=${loginUser.id}'>用户修改</a> <a href='${pageContext.request.contextPath}/logOut'>安全退出</a>
+    </div>
 </body>
 </html>

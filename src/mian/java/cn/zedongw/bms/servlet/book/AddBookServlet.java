@@ -1,16 +1,15 @@
 package cn.zedongw.bms.servlet.book;
 
-import cn.zedongw.bms.dao.Dao;
-import cn.zedongw.bms.dao.impl.DaoImpl;
 import cn.zedongw.bms.entity.Books;
-import cn.zedongw.bms.utils.Dom4jUtils;
-import org.dom4j.DocumentException;
+import cn.zedongw.bms.service.IBooksService;
+import cn.zedongw.bms.service.impl.BooksServiceImpl;
+import cn.zedongw.bms.servlet.BaseServlet;
+import cn.zedongw.bms.utils.BooksUtils;
+import cn.zedongw.bms.utils.IDUtils;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -22,42 +21,32 @@ import java.io.IOException;
  * @modified By：
  */
 
-public class AddBookServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("utf-8");
-        resp.setContentType("text/html;charset=utf-8");
-        HttpSession session = req.getSession();
-        if(session != null){
-            String id1 = (String)session.getAttribute("id");
-            if(id1 != null){
-                Dao<Books> booksDao = new DaoImpl<Books>();
-                String id = Dom4jUtils.getUuid();
-                String bookName = req.getParameter("bookName");
-                String bookAuthor = req.getParameter("bookAuthor");
-                String publisher = req.getParameter("publisher");
-                String price = req.getParameter("price");
-                String bookNum = req.getParameter("bookNum");
-                String publishDate = req.getParameter("publishDate");
-                Books book = new Books(id, bookName, bookAuthor, publisher, Double.valueOf(price), Integer.valueOf(bookNum), publishDate);
-                try {
-                    booksDao.add(book,id);
-                } catch (DocumentException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                resp.sendRedirect(req.getContextPath() + "/books");
-            } else {
-                resp.sendRedirect(req.getContextPath() + "/login.jsp");
-            }
-        } else {
-            resp.sendRedirect(req.getContextPath() + "/login.jsp");
-        }
-    }
+public class AddBookServlet extends BaseServlet {
 
+    /**
+     * Description: servlet业务逻辑处理
+     *
+     * @param req  1
+     * @param resp 2
+     * @throws ServletException
+     * @throws IOException
+     * @methodName: doProcess
+     * @return: void
+     * @author: ZeDongW
+     * @date: 2020/3/29 0029 9:51
+     */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
+    public void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //实例化书本业务逻辑层
+        IBooksService service = new BooksServiceImpl();
+
+        //封装书本对象
+        Books book = BooksUtils.setBook(req, IDUtils.getUuid());
+
+        //新增书本
+        service.addBooks(book);
+
+        //重定向到书本刘表
+        resp.sendRedirect(req.getContextPath() + "/books");
     }
 }

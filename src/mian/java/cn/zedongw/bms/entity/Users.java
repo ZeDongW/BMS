@@ -39,13 +39,12 @@ public class Users {
             return false;
         }
         Users users = (Users) o;
-        return Objects.equals(userName, users.userName) &&
-                Objects.equals(passWord, users.passWord);
+        return userName.equals(users.userName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userName, passWord);
+        return Objects.hash(userName);
     }
 
     public String getId() {

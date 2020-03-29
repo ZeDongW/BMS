@@ -1,18 +1,15 @@
 package cn.zedongw.bms.servlet.user;
 
-import cn.zedongw.bms.dao.Dao;
-import cn.zedongw.bms.dao.impl.DaoImpl;
 import cn.zedongw.bms.entity.Users;
+import cn.zedongw.bms.service.IUsersService;
+import cn.zedongw.bms.service.impl.UsersServiceImpl;
+import cn.zedongw.bms.servlet.BaseServlet;
 import cn.zedongw.bms.utils.comparator.Sort;
-import org.dom4j.DocumentException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 
 /**
@@ -24,42 +21,37 @@ import java.util.ArrayList;
  * @modified By：
  */
 
-public class UsersServlet extends HttpServlet {
+public class UsersServlet extends BaseServlet {
+    /**
+     * Description: servlet业务逻辑处理
+     *
+     * @param req  1
+     * @param resp 2
+     * @throws ServletException
+     * @throws IOException
+     * @methodName: doProcess
+     * @return: void
+     * @author: ZeDongW
+     * @date: 2020/3/29 0029 9:51
+     */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("utf-8");
-        resp.setContentType("text/html;charset=utf-8");
-        HttpSession session = req.getSession();
-        if(session != null){
-            String id = (String)session.getAttribute("id");
-            if(id != null){
-                Dao<Users> usersDao = new DaoImpl<Users>();
-                try {
-                    Users user = usersDao.findById(new Users(), id);
-                    ArrayList<Users> list = usersDao.findAll(new Users());
-                    String sort = req.getParameter("sort");
-                    list = Sort.sort(list,sort);
-                    req.setAttribute("list", list);
-                    req.getRequestDispatcher("/users.jsp").forward(req, resp);
-                } catch (DocumentException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                resp.sendRedirect(req.getContextPath() + "/login.jsp");
-            }
-        } else {
-            resp.sendRedirect(req.getContextPath() + "/login.jsp");
-        }
-    }
+    public void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //实例化用户业务逻辑层
+        IUsersService service = new UsersServiceImpl();
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
+        //查询所有用户
+        ArrayList<Users> usersList = service.findAllUsers();
+
+        //获取排序属性
+        String sort = req.getParameter("sort");
+
+        //根据排序属性排序
+        usersList = Sort.sort(usersList,sort);
+
+        //将书本列表封装到request中
+        req.setAttribute("usersList", usersList);
+
+        //重定向到用户列表页面
+        req.getRequestDispatcher("/WEB-INF/page/users.jsp").forward(req, resp);
     }
 }

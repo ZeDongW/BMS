@@ -1,4 +1,4 @@
-package cn.zedongw.bms.servlet;
+package cn.zedongw.bms.servlet.user;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,21 +19,24 @@ import java.io.IOException;
 public class LogOutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        //设置编码格式
         req.setCharacterEncoding("utf-8");
         resp.setContentType("text/html;charset=utf-8");
-        HttpSession session = req.getSession();
+
+        //获取session对象
+        HttpSession session = req.getSession(false);
+
+        //session不为空
         if(session != null){
-            String id = (String)session.getAttribute("id");
-            if(id != null){
-                session.removeAttribute("id");
-                resp.getWriter().write("安全退出成功，3秒后返回登录页面");
-                resp.setHeader("refresh","3;url= " + req.getContextPath() + "/login.jsp”");
-            } else {
-                resp.sendRedirect(req.getContextPath() + "/login.jsp");
-            }
-        } else {
-            resp.sendRedirect(req.getContextPath() + "/login.jsp");
+
+            //销毁Session
+            session.invalidate();
         }
+
+        //转发到登陆页面
+        req.getRequestDispatcher("/WEB-INF/page/login.jsp").forward(req, resp);
+        return;
     }
 
     @Override
