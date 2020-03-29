@@ -42,9 +42,5 @@ function checkForm() {
     const price = checkPrice();
     const bookNum = checkBookNum();
     const publishDate = checkPublishDate();
-    if (price && bookNum && publishDate) {
-        return true;
-    } else {
-        return false;
-    }
+    return price && bookNum && publishDate;
 }
