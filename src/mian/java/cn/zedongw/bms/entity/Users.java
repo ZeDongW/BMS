@@ -27,6 +27,19 @@ public class Users {
      */
     private String passWord;
 
+    /**
+     * 角色
+     */
+    private String role;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public Users() {
     }
 

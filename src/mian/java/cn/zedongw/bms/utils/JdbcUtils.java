@@ -13,7 +13,7 @@ import java.util.Properties;
  * @modified By：
  */
 
-public class DbUtils {
+public class JdbcUtils {
 
     /**
      * JDBC 驱动类名
@@ -44,7 +44,7 @@ public class DbUtils {
         try {
             //读取配置文件并赋值
             Properties properties = new Properties();
-            properties.load(DbUtils.class.getResourceAsStream("/db.properties"));
+            properties.load(JdbcUtils.class.getResourceAsStream("/db.properties"));
             driverClass = properties.getProperty("driverClass");
             url = properties.getProperty("url");
             userName = properties.getProperty("userName");

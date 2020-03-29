@@ -1,15 +1,11 @@
 package cn.zedongw.bms.dao.impl;
 
+import cn.zedongw.bms.dao.BaseDao;
 import cn.zedongw.bms.dao.IBooksDao;
 import cn.zedongw.bms.entity.Books;
-import cn.zedongw.bms.utils.DbUtils;
-import cn.zedongw.bms.utils.beanutil.BooksUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * @Author ZeDongW
@@ -20,113 +16,65 @@ import java.util.ArrayList;
  * @modified By：
  */
 
-public class BooksDaoImpl implements IBooksDao {
-
-    private Connection conn;
-    private String sql;
-    private PreparedStatement pstmt;
-    private ResultSet rs;
+public class BooksDaoImpl extends BaseDao implements IBooksDao {
 
     @Override
     public void add(Books book) {
-        try {
-            conn = DbUtils.getConnection();
-            sql = "insert into books (id, bookName, bookAuthor, publisher, price, bookNum, publishDate) values (?, ?, ?, ?, ?, ?, ?)";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, book.getId());
-            pstmt.setString(2, book.getBookName());
-            pstmt.setString(3, book.getBookAuthor());
-            pstmt.setString(4, book.getPublisher());
-            pstmt.setDouble(5, book.getPrice());
-            pstmt.setInt(6, book.getBookNum());
-            pstmt.setString(7, book.getPublishDate());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        } finally {
-            DbUtils.dbClose(rs, pstmt, conn);
-        }
+        //SQL
+        String sql = "insert into books (id, bookName, bookAuthor, publisher, price, bookNum, publishDate) values (?, ?, ?, ?, ?, ?, ?)";
+
+        //调用父类更新方法
+        super.update(sql, new Object[]{book.getId(), book.getBookName(), book.getBookAuthor(), book.getPublisher(),
+                book.getPrice(), book.getBookNum(), book.getPublishDate()});
     }
 
     @Override
     public void delete(String id) {
-        try {
-            conn = DbUtils.getConnection();
-            sql = "delete from  books where id = ?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, id);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        } finally {
-            DbUtils.dbClose(rs, pstmt, conn);
-        }
+        //SQL
+        String sql = "delete from books where id = ?";
+
+        //调用父类更新方法
+        super.update(sql, new Object[]{id});
     }
 
     @Override
     public void update(Books book) {
-        try {
-            conn = DbUtils.getConnection();
-            sql = "update books set bookName = ?, bookAuthor = ?, publisher = ?, price = ?, bookNum = ?, publishDate = ? where id = ?";
-            pstmt = conn.prepareStatement(sql);
+        //SQL
+        String sql = "update books set bookName = ?, bookAuthor = ?, publisher = ?, price = ?, " +
+                "bookNum = ?, publishDate = ? where id = ?";
 
-            pstmt.setString(1, book.getBookName());
-            pstmt.setString(2, book.getBookAuthor());
-            pstmt.setString(3, book.getPublisher());
-            pstmt.setDouble(4, book.getPrice());
-            pstmt.setInt(5, book.getBookNum());
-            pstmt.setString(6, book.getPublishDate());
-            pstmt.setString(7, book.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        } finally {
-            DbUtils.dbClose(rs, pstmt, conn);
-        }
+        //调用父类更新方法
+        super.update(sql, new Object[]{book.getBookName(), book.getBookAuthor(), book.getPublisher(),
+                book.getPrice(), book.getBookNum(), book.getPublishDate(), book.getId()});
     }
 
     @Override
     public ArrayList<Books> findAll() {
-        ArrayList<Books> list = new ArrayList<Books>();
-        try {
-            conn = DbUtils.getConnection();
-            sql = "select * from books";
-            pstmt = conn.prepareStatement(sql);
-            rs = pstmt.executeQuery();
-            while (rs.next()){
-                list.add(BooksUtil.getBean(rs));
-            }
-            return list;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        } finally {
-            DbUtils.dbClose(rs, pstmt, conn);
-        }
+        //SQL
+        String sql = "select * from books";
+
+        //调用父类的查询方法
+        ArrayList<Books> booksList = super.query(sql, null, Books.class);
+
+        return booksList;
     }
 
 
     @Override
     public Books findById(String id) {
-        try {
-            conn = DbUtils.getConnection();
-            sql = "select * from books where id =?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, id);
-            rs = pstmt.executeQuery();
-            if (rs.next()){
-                return BooksUtil.getBean(rs);
-            }
-            return null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        } finally {
-            DbUtils.dbClose(rs, pstmt, conn);
+        //SQL
+        String sql = "select * from books where id = ?";
+
+        //调用父类的查询方法
+        ArrayList<Books> booksList = super.query(sql, new Object[]{id}, Books.class);
+
+        //获取迭代器
+        Iterator<Books> iterator = booksList.iterator();
+        while (iterator.hasNext()) {
+            return iterator.next();
         }
+
+        return null;
     }
 
 }
