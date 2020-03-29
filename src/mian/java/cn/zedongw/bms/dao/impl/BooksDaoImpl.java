@@ -90,7 +90,7 @@ public class BooksDaoImpl implements IBooksDao {
 
     @Override
     public ArrayList<Books> findAll() {
-        ArrayList<Books> list = new ArrayList<Books>();
+        ArrayList<Books> list = new ArrayList<>();
         try {
             conn = DbUtils.getConnection();
             sql = "select * from books";
