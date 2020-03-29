@@ -12,16 +12,16 @@ import java.util.Scanner;
  * @author ：ZeDongW
  * @version : 1.0
  * @ClassName : Application
- * @description：图书管理系统入口
+ * @description： 图书管理系统入口
  * @modified By：
  * @date ：Created in 2019/01/23/0023 22:38
  */
 public class Application {
     public static void main(String[] args) {
         //存储用户的list
-        HashSet<Users> users = new HashSet<Users>();
+        HashSet<Users> users = new HashSet<>();
         //存储书本的list
-        ArrayList<Books> books = new ArrayList<Books>();
+        ArrayList<Books> books = new ArrayList<>();
         //初始化管理员用户
         users.add(new Users("admin","q123456"));
         //获取用户的输入信息
