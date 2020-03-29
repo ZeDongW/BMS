@@ -2,7 +2,7 @@ package cn.zedongw.bms.dao.impl;
 
 import cn.zedongw.bms.dao.IUsersDao;
 import cn.zedongw.bms.entity.Users;
-import cn.zedongw.bms.utils.JdbcUtils;
+import cn.zedongw.bms.utils.MyDataSourcePool;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -43,7 +43,7 @@ public class UsersDaoImpl implements IUsersDao {
             sql = "insert into users(id, userName, passWord) values (?, ?, MD5(?))";
 
             //获取数据库连接对象
-            conn = JdbcUtils.getConnection();
+            conn = MyDataSourcePool.getConnection();
 
             //获取DUUtils操作对象
             QueryRunner queryRunner = new QueryRunner();
@@ -53,7 +53,7 @@ public class UsersDaoImpl implements IUsersDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            JdbcUtils.dbClose(conn);
+            MyDataSourcePool.dbClose(conn);
         }
     }
 
@@ -64,7 +64,7 @@ public class UsersDaoImpl implements IUsersDao {
             sql = "delete from users where id = ?";
 
             //获取数据库连接对象
-            conn = JdbcUtils.getConnection();
+            conn = MyDataSourcePool.getConnection();
 
             //获取DUUtils操作对象
             QueryRunner queryRunner = new QueryRunner();
@@ -74,7 +74,7 @@ public class UsersDaoImpl implements IUsersDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            JdbcUtils.dbClose(conn);
+            MyDataSourcePool.dbClose(conn);
         }
     }
 
@@ -85,7 +85,7 @@ public class UsersDaoImpl implements IUsersDao {
             sql = "update users set passWord = MD5(?) where id = ?";
 
             //获取数据库连接对象
-            conn = JdbcUtils.getConnection();
+            conn = MyDataSourcePool.getConnection();
 
             //获取DUUtils操作对象
             QueryRunner queryRunner = new QueryRunner();
@@ -95,7 +95,7 @@ public class UsersDaoImpl implements IUsersDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            JdbcUtils.dbClose(conn);
+            MyDataSourcePool.dbClose(conn);
         }
     }
 
@@ -107,7 +107,7 @@ public class UsersDaoImpl implements IUsersDao {
             sql = "select * from users";
 
             //获取数据库连接对象
-            conn = JdbcUtils.getConnection();
+            conn = MyDataSourcePool.getConnection();
 
             //获取DUUtils操作对象
             QueryRunner queryRunner = new QueryRunner();
@@ -118,7 +118,7 @@ public class UsersDaoImpl implements IUsersDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            JdbcUtils.dbClose(conn);
+            MyDataSourcePool.dbClose(conn);
         }
     }
 
@@ -129,7 +129,7 @@ public class UsersDaoImpl implements IUsersDao {
             sql = "select * from users where id = ?";
 
             //获取数据库连接对象
-            conn = JdbcUtils.getConnection();
+            conn = MyDataSourcePool.getConnection();
 
             //获取DUUtils操作对象
             QueryRunner queryRunner = new QueryRunner();
@@ -140,7 +140,7 @@ public class UsersDaoImpl implements IUsersDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            JdbcUtils.dbClose(conn);
+            MyDataSourcePool.dbClose(conn);
         }
     }
 
@@ -151,7 +151,7 @@ public class UsersDaoImpl implements IUsersDao {
             sql = "select * from users where userName = ? and passWord = MD5(?)";
 
             //获取数据库连接对象
-            conn = JdbcUtils.getConnection();
+            conn = MyDataSourcePool.getConnection();
 
             //获取DUUtils操作对象
             QueryRunner queryRunner = new QueryRunner();
@@ -162,7 +162,7 @@ public class UsersDaoImpl implements IUsersDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            JdbcUtils.dbClose(conn);
+            MyDataSourcePool.dbClose(conn);
         }
     }
 
@@ -173,7 +173,7 @@ public class UsersDaoImpl implements IUsersDao {
             sql = "select count(1) from users where userName = ?";
 
             //获取数据库连接对象
-            conn = JdbcUtils.getConnection();
+            conn = MyDataSourcePool.getConnection();
 
             //获取DUUtils操作对象
             QueryRunner queryRunner = new QueryRunner();
@@ -185,7 +185,7 @@ public class UsersDaoImpl implements IUsersDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            JdbcUtils.dbClose(conn);
+            MyDataSourcePool.dbClose(conn);
         }
     }
 

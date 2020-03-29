@@ -2,7 +2,7 @@ package cn.zedongw.bms.dao.impl;
 
 import cn.zedongw.bms.dao.IBooksDao;
 import cn.zedongw.bms.entity.Books;
-import cn.zedongw.bms.utils.JdbcUtils;
+import cn.zedongw.bms.utils.MyDataSourcePool;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -39,7 +39,7 @@ public class BooksDaoImpl implements IBooksDao {
             sql = "insert into books (id, bookName, bookAuthor, publisher, price, bookNum, publishDate) values (?, ?, ?, ?, ?, ?, ?)";
 
             //获取数据库连接对象
-            conn = JdbcUtils.getConnection();
+            conn = MyDataSourcePool.getConnection();
 
             //获取DUUtils操作对象
             QueryRunner queryRunner = new QueryRunner();
@@ -51,7 +51,7 @@ public class BooksDaoImpl implements IBooksDao {
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            JdbcUtils.dbClose(conn);
+            MyDataSourcePool.dbClose(conn);
         }
     }
 
@@ -62,7 +62,7 @@ public class BooksDaoImpl implements IBooksDao {
             sql = "delete from books where id = ?";
 
             //获取数据库连接对象
-            conn = JdbcUtils.getConnection();
+            conn = MyDataSourcePool.getConnection();
 
             //获取DUUtils操作对象
             QueryRunner queryRunner = new QueryRunner();
@@ -73,7 +73,7 @@ public class BooksDaoImpl implements IBooksDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            JdbcUtils.dbClose(conn);
+            MyDataSourcePool.dbClose(conn);
         }
     }
 
@@ -85,7 +85,7 @@ public class BooksDaoImpl implements IBooksDao {
                     "bookNum = ?, publishDate = ? where id = ?";
 
             //获取数据库连接对象
-            conn = JdbcUtils.getConnection();
+            conn = MyDataSourcePool.getConnection();
 
             //获取DUUtils操作对象
             QueryRunner queryRunner = new QueryRunner();
@@ -97,7 +97,7 @@ public class BooksDaoImpl implements IBooksDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            JdbcUtils.dbClose(conn);
+            MyDataSourcePool.dbClose(conn);
         }
     }
 
@@ -109,7 +109,7 @@ public class BooksDaoImpl implements IBooksDao {
             sql = "select * from books";
 
             //获取数据库连接对象
-            conn = JdbcUtils.getConnection();
+            conn = MyDataSourcePool.getConnection();
 
             //获取DUUtils操作对象
             QueryRunner queryRunner = new QueryRunner();
@@ -120,7 +120,7 @@ public class BooksDaoImpl implements IBooksDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            JdbcUtils.dbClose(conn);
+            MyDataSourcePool.dbClose(conn);
         }
     }
 
@@ -133,7 +133,7 @@ public class BooksDaoImpl implements IBooksDao {
             sql = "select * from books where id = ?";
 
             //获取数据库连接对象
-            conn = JdbcUtils.getConnection();
+            conn = MyDataSourcePool.getConnection();
 
             //获取DUUtils操作对象
             QueryRunner queryRunner = new QueryRunner();
@@ -144,7 +144,7 @@ public class BooksDaoImpl implements IBooksDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            JdbcUtils.dbClose(conn);
+            MyDataSourcePool.dbClose(conn);
         }
     }
 }
