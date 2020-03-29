@@ -1,12 +1,10 @@
-const userId = document.getElementById("userNameCheck");
-const passId = document.getElementById("passWordCheck");
-
 function arr(value) {
     const form = document.getElementById("form");
     form.setAttribute("action", value)
 }
 
 function checkUserName() {
+    const userId = document.getElementById("userNameCheck");
     const userName = document.getElementById("userName").value;
     const reg = /^[a-zA-Z0-9]{2,16}$/i;
     if (reg.test(userName)) {
@@ -19,6 +17,7 @@ function checkUserName() {
 }
 
 function checkPassWord() {
+    const passId = document.getElementById("passWordCheck");
     const passWord = document.getElementById("passWord").value;
     const reg = /^(?![0-9\W]+$)[a-zA-Z0-9\W]{6,16}$/i;
     if (reg.test(passWord)) {
@@ -31,7 +30,5 @@ function checkPassWord() {
 }
 
 function checkForm() {
-    const userName = checkUserName();
-    const passWord = checkPassWord();
-    return userName && passWord;
+    return checkUserName() && checkPassWord();
 }
