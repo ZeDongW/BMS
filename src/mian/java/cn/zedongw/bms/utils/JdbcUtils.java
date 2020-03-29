@@ -1,7 +1,9 @@
 package cn.zedongw.bms.utils;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Properties;
 
 /**
@@ -79,32 +81,14 @@ public class JdbcUtils {
      * @Param: [rs, pstmt, conn]
      * @return: void
      */
-    public static void dbClose(ResultSet rs, PreparedStatement pstmt,Connection conn){
+    public static void dbClose(Connection conn) {
         try {
-            //数据库结果集对象
-            if (rs != null){
-                rs.close();
+            //数据库连接对象
+            if (conn != null) {
+                conn.close();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                //SQL预编译对象
-                if (pstmt != null){
-                    pstmt.close();
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            } finally {
-                try {
-                    //数据库连接对象
-                    if (conn != null){
-                        conn.close();
-                    }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
         }
     }
 }
