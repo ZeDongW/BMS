@@ -80,7 +80,7 @@ public class UsersDaoImpl implements IUsersDao {
 
     @Override
     public ArrayList<Users> findAll() {
-        ArrayList<Users> list = new ArrayList<Users>();
+        ArrayList<Users> list = new ArrayList<>();
         try {
             conn = DbUtils.getConnection();
             sql = "select * from users";
@@ -163,9 +163,7 @@ public class UsersDaoImpl implements IUsersDao {
 
             if (rs.next()){
                 int count = rs.getInt(1);
-                if (count >= 1){
-                    return true;
-                }
+                return count >= 1;
             }
             return false;
         } catch (SQLException e) {
