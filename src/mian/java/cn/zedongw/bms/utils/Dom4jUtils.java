@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author ZeDongW
@@ -58,7 +59,7 @@ public class Dom4jUtils {
      * @return: java.util.ArrayList<T>
      */
     public static <T> ArrayList<T>  getList(Class<T> obj) throws DocumentException, IllegalAccessException, InstantiationException, ParseException {
-        ArrayList<T> lists = new ArrayList<T>();
+        ArrayList<T> lists = new ArrayList<>();
         dom = loadXml(obj);
         rootElement= dom.getRootElement();
         xPath = rootElement.getName() + "/*";
@@ -104,7 +105,7 @@ public class Dom4jUtils {
         }
         BufferedWriter bufferedWriter = null;
         try {
-            bufferedWriter = new BufferedWriter(new FileWriter(new File(Dom4jUtils.class.getClassLoader().getResource(path).getFile())));
+            bufferedWriter = new BufferedWriter(new FileWriter(new File(Objects.requireNonNull(Dom4jUtils.class.getClassLoader().getResource(path)).getFile())));
             OutputFormat prettyPrint = OutputFormat.createPrettyPrint();
             prettyPrint.setEncoding("UTF-8");
             XMLWriter xmlWriter = new XMLWriter(bufferedWriter, prettyPrint);
@@ -113,7 +114,9 @@ public class Dom4jUtils {
             throw new RuntimeException(e);
         } finally {
             try {
-                bufferedWriter.close();
+                if (bufferedWriter != null) {
+                    bufferedWriter.close();
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -167,7 +170,7 @@ public class Dom4jUtils {
             for(int i = 0; i < declaredFields.length; i ++){
                 Field field = declaredFields[i];
                 Class<?> type = field.getType();
-                String value = null;
+                String value;
                 if(Date.class.equals(type)){
                     value = MyDateUtils.dateToStr((Date)field.get(t));
                 } else {
