@@ -8,7 +8,7 @@ import java.util.Comparator;
  * @author ：ZeDongW
  * @version : 1.0
  * @ClassName : ComparatorByAuthor
- * @description：图书馆里系统---图书自定义比较器---根据作者
+ * @description： 图书馆里系统---图书自定义比较器---根据作者
  * @modified By：
  * @date ：Created in 2019/01/22/0022 23:01
  */
