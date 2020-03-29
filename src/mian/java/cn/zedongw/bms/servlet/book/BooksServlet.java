@@ -34,22 +34,16 @@ public class BooksServlet extends HttpServlet {
         if(session != null){
             String id = (String)session.getAttribute("id");
             if(id != null){
-                Dao<Users> usersDao = new DaoImpl<Users>();
-                Dao<Books> booksDao = new DaoImpl<Books>();
+                Dao<Users> usersDao = new DaoImpl<>();
+                Dao<Books> booksDao = new DaoImpl<>();
                 try {
                     Users user = usersDao.findById(new Users(), id);
                     ArrayList<Books> list = booksDao.findAll(new Books());
                     String sort = req.getParameter("sort");
-                    list = Sort.sort(list,sort);
+                    Sort.sort(list, sort);
                     String html = getHtml(req, user, list);
                     resp.getWriter().write(html);
-                } catch (DocumentException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
+                } catch (DocumentException | IllegalAccessException | InstantiationException | ParseException e) {
                     e.printStackTrace();
                 }
             } else {

@@ -34,7 +34,7 @@ public class LoginServlet extends HttpServlet {
         String passWord = req.getParameter("passWord");
         String uuid = Dom4jUtils.getUuid();
         Users user = new Users(uuid, userName, passWord);
-        Dao<Users> usersDao = new DaoImpl<Users>();
+        Dao<Users> usersDao = new DaoImpl<>();
         try {
             ArrayList<Users> usersList = usersDao.findAll(new Users());
             if(usersList.contains(user)){
@@ -47,23 +47,16 @@ public class LoginServlet extends HttpServlet {
                             return;
                         } else {
                             resp.getWriter().write("密码错误，请输入正确密码，3秒后返回注册页面");
-                            resp.setHeader("refresh","3;url= " + req.getContextPath() + "/index.html”");
+                            resp.setHeader("refresh", "3;url= " + req.getContextPath() + "/index.html”");
                             return;
                         }
                     }
                 }
             } else {
                 resp.getWriter().write("该用户名不存在，请输入正确用户名，3秒后返回注册页面");
-                resp.setHeader("refresh","3;url= " + req.getContextPath() + "/index.html”");
-                return;
+                resp.setHeader("refresh", "3;url= " + req.getContextPath() + "/index.html”");
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (ParseException | InstantiationException | DocumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }

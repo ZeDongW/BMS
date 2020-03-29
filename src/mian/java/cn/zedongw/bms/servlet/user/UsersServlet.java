@@ -36,21 +36,15 @@ public class UsersServlet extends HttpServlet {
         if (session != null) {
             String id = (String) session.getAttribute("id");
             if (id != null) {
-                Dao<Users> usersDao = new DaoImpl<Users>();
+                Dao<Users> usersDao = new DaoImpl<>();
                 try {
                     Users user = usersDao.findById(new Users(), id);
                     ArrayList<Users> list = usersDao.findAll(new Users());
                     String sort = req.getParameter("sort");
-                    list = Sort.sort(list, sort);
+                    Sort.sort(list, sort);
                     String html = getHtml(req, user, list);
                     resp.getWriter().write(html);
-                } catch (DocumentException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
+                } catch (DocumentException | IllegalAccessException | InstantiationException | ParseException e) {
                     e.printStackTrace();
                 }
             } else {
@@ -62,57 +56,57 @@ public class UsersServlet extends HttpServlet {
     }
 
     private String getHtml(HttpServletRequest req, Users user, ArrayList<Users> list) {
-        String html = "";
-        html += "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>";
-        html += "<html xmlns='http://www.w3.org/1999/xhtml'>";
-        html += "<head>";
-        html += "    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />";
-        html += "    <title>用户管理</title>";
-        html += "    <style type='text/css'>";
-        html += "        table td{";
-        html += "            text-align:center;";
-        html += "        }";
-        html += "        table{";
-        html += "           border-collapse:collapse;";
-        html += "        }";
-        html += "    </style>";
-        html += "</head>";
-        html += "<body>";
-        html += "<div style='text-align: center'>    欢迎登陆， <font size='+2' color='green'> " + user.getUserName() + " </font><br />";
-        html += "<h3>用户管理</h3></div>";
-        html += "<table align='center' border='1' width='800px'>";
-        html += "    <tr>";
-        html += "        <th><a href='" + req.getContextPath() + "/users?sort=" + "userId" + "'>编号</a></th>";
-        html += "        <th><a href='" + req.getContextPath() + "/users?sort=" + "userName" + "'>用户名</a></th>";
+        StringBuilder html = new StringBuilder();
+        html.append("<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>");
+        html.append("<html xmlns='http://www.w3.org/1999/xhtml'>");
+        html.append("<head>");
+        html.append("    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />");
+        html.append("    <title>用户管理</title>");
+        html.append("    <style type='text/css'>");
+        html.append("        table td{");
+        html.append("            text-align:center;");
+        html.append("        }");
+        html.append("        table{");
+        html.append("           border-collapse:collapse;");
+        html.append("        }");
+        html.append("    </style>");
+        html.append("</head>");
+        html.append("<body>");
+        html.append("<div style='text-align: center'>    欢迎登陆， <font size='+2' color='green'> ").append(user.getUserName()).append(" </font><br />");
+        html.append("<h3>用户管理</h3></div>");
+        html.append("<table align='center' border='1' width='800px'>");
+        html.append("    <tr>");
+        html.append("        <th><a href='").append(req.getContextPath()).append("/users?sort=").append("userId").append("'>编号</a></th>");
+        html.append("        <th><a href='").append(req.getContextPath()).append("/users?sort=").append("userName").append("'>用户名</a></th>");
         if (ADMIN.equals(user.getUserName())) {
-            html += "        <th>操作</th>";
-            html += "    </tr>";
+            html.append("        <th>操作</th>");
+            html.append("    </tr>");
             if (list != null) {
                 for (Users user1 : list) {
-                    html += "    <tr>";
-                    html += "    	<td>" + user1.getId() + "</td>";
-                    html += "    	<td>" + user1.getUserName() + "</td>";
-                    html += "        <td><a href='" + req.getContextPath() + "/queryUser?id=" + user1.getId() + "'>修改</a>&nbsp;<a href='" + req.getContextPath() + "/deleteUser?id=" + user1.getId() + "'>删除</a></td>";
-                    html += "    </tr>";
+                    html.append("    <tr>");
+                    html.append("    	<td>").append(user1.getId()).append("</td>");
+                    html.append("    	<td>").append(user1.getUserName()).append("</td>");
+                    html.append("        <td><a href='").append(req.getContextPath()).append("/queryUser?id=").append(user1.getId()).append("'>修改</a>&nbsp;<a href='").append(req.getContextPath()).append("/deleteUser?id=").append(user1.getId()).append("'>删除</a></td>");
+                    html.append("    </tr>");
                 }
             }
         } else {
-            html += "    </tr>";
+            html.append("    </tr>");
             if (list != null) {
                 for (Users user1 : list) {
-                    html += "    <tr>";
-                    html += "    	<td>" + user1.getId() + "</td>";
-                    html += "    	<td>" + user1.getUserName() + "</td>";
-                    html += "    </tr>";
+                    html.append("    <tr>");
+                    html.append("    	<td>").append(user1.getId()).append("</td>");
+                    html.append("    	<td>").append(user1.getUserName()).append("</td>");
+                    html.append("    </tr>");
                 }
             }
         }
 
-        html += "</table>";
-        html += " <div style='text-align: center'><a href='" + req.getContextPath() + "/index'>返回主页</a>&nbsp;&nbsp;&nbsp;<a href=' " + req.getContextPath() + "/queryUser?id=" + user.getId() + "'>用户修改</a>&nbsp;&nbsp;&nbsp;<a href=' " + req.getContextPath() + "/logOut'>安全退出</a></div>";
-        html += "</body>";
-        html += "</html>";
-        return html;
+        html.append("</table>");
+        html.append(" <div style='text-align: center'><a href='").append(req.getContextPath()).append("/index'>返回主页</a>&nbsp;&nbsp;&nbsp;<a href=' ").append(req.getContextPath()).append("/queryUser?id=").append(user.getId()).append("'>用户修改</a>&nbsp;&nbsp;&nbsp;<a href=' ").append(req.getContextPath()).append("/logOut'>安全退出</a></div>");
+        html.append("</body>");
+        html.append("</html>");
+        return html.toString();
     }
 
     @Override

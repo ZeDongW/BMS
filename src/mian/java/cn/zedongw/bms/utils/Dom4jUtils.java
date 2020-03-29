@@ -15,6 +15,7 @@ import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -67,7 +68,7 @@ public class Dom4jUtils {
         }
         BufferedWriter bufferedWriter = null;
         try {
-            bufferedWriter = new BufferedWriter(new FileWriter(Dom4jUtils.class.getClassLoader().getResource(path).getFile()));
+            bufferedWriter = new BufferedWriter(new FileWriter(Objects.requireNonNull(Dom4jUtils.class.getClassLoader().getResource(path)).getFile()));
             OutputFormat prettyPrint = OutputFormat.createPrettyPrint();
             prettyPrint.setEncoding("UTF-8");
             XMLWriter xmlWriter = new XMLWriter(bufferedWriter, prettyPrint);
@@ -76,7 +77,9 @@ public class Dom4jUtils {
             throw new RuntimeException(e);
         } finally {
             try {
-                bufferedWriter.close();
+                if (bufferedWriter != null) {
+                    bufferedWriter.close();
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -149,7 +152,7 @@ public class Dom4jUtils {
      * @return: java.util.ArrayList<T>
      */
     public static <T> ArrayList<T>  findAll(Class<T> obj) throws DocumentException, IllegalAccessException, InstantiationException, ParseException {
-        ArrayList<T> lists = new ArrayList<T>();
+        ArrayList<T> lists = new ArrayList<>();
         dom = loadXml(obj);
         rootElement= dom.getRootElement();
         xPath = rootElement.getName() + "/*";
@@ -178,8 +181,7 @@ public class Dom4jUtils {
         if(element == null){
             return null;
         }
-        T t = getObj(obj, element);
-        return t;
+        return getObj(obj, element);
     }
 
     /**

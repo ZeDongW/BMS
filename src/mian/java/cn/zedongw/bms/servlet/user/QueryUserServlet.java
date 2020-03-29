@@ -30,7 +30,7 @@ public class QueryUserServlet extends HttpServlet {
         if(session != null){
             String id1 = (String)session.getAttribute("id");
             if(id1 != null){
-                Dao<Users> usersDao = new DaoImpl<Users>();
+                Dao<Users> usersDao = new DaoImpl<>();
                 String id = req.getParameter("id");
                 try {
                     Users user1 = usersDao.findById(new Users(), id1);
@@ -70,11 +70,7 @@ public class QueryUserServlet extends HttpServlet {
                     html += "</html>";
 
                     resp.getWriter().write(html);
-                } catch (DocumentException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
+                } catch (DocumentException | IllegalAccessException | InstantiationException e) {
                     e.printStackTrace();
                 }
             } else {

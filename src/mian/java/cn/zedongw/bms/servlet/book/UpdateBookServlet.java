@@ -30,7 +30,7 @@ public class UpdateBookServlet extends HttpServlet {
         if(session != null){
             String id1 = (String)session.getAttribute("id");
             if(id1 != null){
-                Dao<Books> booksDao = new DaoImpl<Books>();
+                Dao<Books> booksDao = new DaoImpl<>();
                 String id = req.getParameter("id");
                 String bookName = req.getParameter("bookName");
                 String bookAuthor = req.getParameter("bookAuthor");
@@ -38,12 +38,10 @@ public class UpdateBookServlet extends HttpServlet {
                 String price = req.getParameter("price");
                 String bookNum = req.getParameter("bookNum");
                 String publishDate = req.getParameter("publishDate");
-                Books book = new Books(id, bookName, bookAuthor, publisher, Double.valueOf(price), Integer.valueOf(bookNum), publishDate);
+                Books book = new Books(id, bookName, bookAuthor, publisher, Double.parseDouble(price), Integer.parseInt(bookNum), publishDate);
                 try {
                     booksDao.update(book, id);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (DocumentException e) {
+                } catch (IllegalAccessException | DocumentException e) {
                     e.printStackTrace();
                 }
                 resp.sendRedirect(req.getContextPath() + "/books");

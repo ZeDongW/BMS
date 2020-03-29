@@ -30,30 +30,26 @@ public class IndexServlet extends HttpServlet {
         if(session != null){
             String id = (String)session.getAttribute("id");
             if(id != null){
-                Dao<Users> usersDao = new DaoImpl<Users>();
+                Dao<Users> usersDao = new DaoImpl<>();
                 try {
                     Users user = usersDao.findById(new Users(), id);
                     String html = "";
-                    html +="<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>";
-                    html +="<html xmlns='http://www.w3.org/1999/xhtml'>";
-                    html +="<head>";
-                    html +="    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />";
-                    html +="    <title>登录成功</title>";
-                    html +="</head>";
-                    html +="<center>";
-                    html +="    欢迎登陆， <font size='+2' color='green'> " + user.getUserName() + " </font><br />";
-                    html +="    <a href=' " + req.getContextPath() + "/users'>用户管理</a> <a href=' " + req.getContextPath() + "/books'>书本管理</a> <br />";
-                    html +="    <a href=' " + req.getContextPath() + "/queryUser?id="+ user.getId()+"'>用户修改</a> <a href=' " + req.getContextPath() + "/logOut'>安全退出</a>";
-                    html +="</center>";
-                    html +="<body>";
-                    html +="</body>";
-                    html +="</html>";
+                    html += "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>";
+                    html += "<html xmlns='http://www.w3.org/1999/xhtml'>";
+                    html += "<head>";
+                    html += "    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />";
+                    html += "    <title>登录成功</title>";
+                    html += "</head>";
+                    html += "<center>";
+                    html += "    欢迎登陆， <font size='+2' color='green'> " + user.getUserName() + " </font><br />";
+                    html += "    <a href=' " + req.getContextPath() + "/users'>用户管理</a> <a href=' " + req.getContextPath() + "/books'>书本管理</a> <br />";
+                    html += "    <a href=' " + req.getContextPath() + "/queryUser?id=" + user.getId() + "'>用户修改</a> <a href=' " + req.getContextPath() + "/logOut'>安全退出</a>";
+                    html += "</center>";
+                    html += "<body>";
+                    html += "</body>";
+                    html += "</html>";
                     resp.getWriter().write(html);
-                } catch (DocumentException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
+                } catch (DocumentException | IllegalAccessException | InstantiationException e) {
                     e.printStackTrace();
                 }
             } else {

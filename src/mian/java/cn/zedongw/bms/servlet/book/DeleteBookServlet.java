@@ -30,14 +30,12 @@ public class DeleteBookServlet extends HttpServlet {
         if(session != null){
             String id1 = (String)session.getAttribute("id");
             if(id1 != null){
-                Dao<Books> booksDao = new DaoImpl<Books>();
+                Dao<Books> booksDao = new DaoImpl<>();
                 String id = req.getParameter("id");
                 if(id != null){
                     try {
                         booksDao.delete(new Books(), id);
-                    } catch (DocumentException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
+                    } catch (DocumentException | IllegalAccessException e) {
                         e.printStackTrace();
                     }
                 }

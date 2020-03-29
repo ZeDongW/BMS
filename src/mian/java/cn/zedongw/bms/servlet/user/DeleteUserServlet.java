@@ -30,14 +30,12 @@ public class DeleteUserServlet extends HttpServlet {
         if(session != null){
             String id1 = (String)session.getAttribute("id");
             if(id1 != null){
-                Dao<Users> usersDao = new DaoImpl<Users>();
+                Dao<Users> usersDao = new DaoImpl<>();
                 String id = req.getParameter("id");
                 if(id != null){
                     try {
                         usersDao.delete(new Users(), id);
-                    } catch (DocumentException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
+                    } catch (DocumentException | IllegalAccessException e) {
                         e.printStackTrace();
                     }
                 }

@@ -31,7 +31,7 @@ public class AddBookServlet extends HttpServlet {
         if(session != null){
             String id1 = (String)session.getAttribute("id");
             if(id1 != null){
-                Dao<Books> booksDao = new DaoImpl<Books>();
+                Dao<Books> booksDao = new DaoImpl<>();
                 String id = Dom4jUtils.getUuid();
                 String bookName = req.getParameter("bookName");
                 String bookAuthor = req.getParameter("bookAuthor");
@@ -39,12 +39,10 @@ public class AddBookServlet extends HttpServlet {
                 String price = req.getParameter("price");
                 String bookNum = req.getParameter("bookNum");
                 String publishDate = req.getParameter("publishDate");
-                Books book = new Books(id, bookName, bookAuthor, publisher, Double.valueOf(price), Integer.valueOf(bookNum), publishDate);
+                Books book = new Books(id, bookName, bookAuthor, publisher, Double.parseDouble(price), Integer.parseInt(bookNum), publishDate);
                 try {
-                    booksDao.add(book,id);
-                } catch (DocumentException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
+                    booksDao.add(book, id);
+                } catch (DocumentException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
                 resp.sendRedirect(req.getContextPath() + "/books");

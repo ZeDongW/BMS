@@ -32,25 +32,18 @@ public class RegistServlet extends HttpServlet {
         String passWord = req.getParameter("passWord");
         String uuid = Dom4jUtils.getUuid();
         Users user = new Users(uuid, userName, passWord);
-        Dao<Users> usersDao = new DaoImpl<Users>();
+        Dao<Users> usersDao = new DaoImpl<>();
         try {
             ArrayList<Users> usersList = usersDao.findAll(new Users());
-            if(usersList.contains(user)){
+            if (usersList.contains(user)) {
                 resp.getWriter().write("该用户名已被注册，请重新注册，3秒后返回注册页面");
-                resp.setHeader("refresh","3;url= " + req.getContextPath() + "/index.html”");
-                return;
+                resp.setHeader("refresh", "3;url= " + req.getContextPath() + "/index.html”");
             } else {
                 usersDao.add(user, uuid);
                 resp.getWriter().write("注册成功，3秒后返回登录页面");
-                resp.setHeader("refresh","3;url= " + req.getContextPath() + "/index.html”");
+                resp.setHeader("refresh", "3;url= " + req.getContextPath() + "/index.html”");
             }
-        } catch ( ParseException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (ParseException | InstantiationException | DocumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }

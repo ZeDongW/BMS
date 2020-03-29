@@ -30,16 +30,14 @@ public class UpdateUserServlet extends HttpServlet {
         if(session != null){
             String id1 = (String)session.getAttribute("id");
             if(id1 != null){
-                Dao<Users> usersDao = new DaoImpl<Users>();
+                Dao<Users> usersDao = new DaoImpl<>();
                 String id = req.getParameter("id");
                 String userName = req.getParameter("userName");
                 String passWord = req.getParameter("passWord");
                 Users user = new Users(id,userName,passWord);
                 try {
                     usersDao.update(user, id);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (DocumentException e) {
+                } catch (IllegalAccessException | DocumentException e) {
                     e.printStackTrace();
                 }
                 resp.sendRedirect(req.getContextPath() + "/users");

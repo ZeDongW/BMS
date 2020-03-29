@@ -31,13 +31,13 @@ public class QueryBookServlet extends HttpServlet {
         if(session != null){
             String id1 = (String)session.getAttribute("id");
             if(id1 != null){
-                Dao<Users> usersDao = new DaoImpl<Users>();
-                Dao<Books> booksDao = new DaoImpl<Books>();
+                Dao<Users> usersDao = new DaoImpl<>();
+                Dao<Books> booksDao = new DaoImpl<>();
                 String id = req.getParameter("id");
                 try {
                     Users user = usersDao.findById(new Users(), id1);
-                    Books book = null;
-                    if(id != null){
+                    Books book;
+                    if (id != null) {
                         book = booksDao.findById(new Books(), id);
                     } else {
                         book = new Books();
@@ -45,11 +45,7 @@ public class QueryBookServlet extends HttpServlet {
                     String html = getHtml(req, id, user, book);
 
                     resp.getWriter().write(html);
-                } catch (DocumentException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
+                } catch (DocumentException | IllegalAccessException | InstantiationException e) {
                     e.printStackTrace();
                 }
             } else {
