@@ -7,7 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @Author ZeDongW
@@ -23,19 +24,16 @@ public class LoginFilter implements Filter {
     /**
      * 放行列表
      */
-    private ArrayList<String> releaseList = new ArrayList<>();
+    private Set<String> ignoreSet = new HashSet<String>();
 
     @Override
     public void init(FilterConfig filterConfig) {
         //初始化放行列表
-
-        //登录
-        releaseList.add("login");
-        releaseList.add("login.jsp");
-        //注册
-        releaseList.add("regist");
-        //注销
-        releaseList.add("logOut");
+        String ignoresParam = filterConfig.getInitParameter("ignores");
+        String[] ignoreArray = ignoresParam.split(",");
+        for (String s : ignoreArray) {
+            ignoreSet.add(s);
+        }
     }
 
     @Override
@@ -51,12 +49,8 @@ public class LoginFilter implements Filter {
         //获取请求资源
         String requestUri = req.getRequestURI();
 
-        //获取请求参数
-        String path = requestUri.substring(requestUri.lastIndexOf("/") + 1);
-
-
-        //登录注册注销，直接放行
-        if (releaseList.contains(path)) {
+        //符合忽略规则，直接放行
+        if (isIgnore(requestUri)) {
             //直接放行
             filterChain.doFilter(req, resp);
         } else {
@@ -75,11 +69,27 @@ public class LoginFilter implements Filter {
             }
             //未登录，转发到登陆页面
             req.getRequestDispatcher("/WEB-INF/page/login.jsp").forward(req, resp);
+            return;
         }
     }
 
     @Override
     public void destroy() {
 
+    }
+
+    /**
+     * 是否匹配忽略规则
+     *
+     * @param requestUri
+     * @return
+     */
+    private boolean isIgnore(String requestUri) {
+        for (String ignore : ignoreSet) {
+            if (requestUri.endsWith(ignore)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

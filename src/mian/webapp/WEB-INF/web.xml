@@ -6,6 +6,10 @@
     <filter>
         <filter-name>loginFilter</filter-name>
         <filter-class>cn.zedongw.bms.filter.LoginFilter</filter-class>
+        <init-param>
+            <param-name>ignores</param-name>
+            <param-value>login,login.jsp,regist,logOut,.js,.css</param-value>
+        </init-param>
     </filter>
     <filter-mapping>
         <filter-name>loginFilter</filter-name>
