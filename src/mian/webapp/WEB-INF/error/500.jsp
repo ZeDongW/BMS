@@ -11,6 +11,6 @@
     <title>系统出错</title>
 </head>
 <body>
-<div style="text-align: center">亲，系统出现了一点小小的错误，程序猿小哥哥正在紧急维护中，请耐心等待！错误原因：${pageContext.exception.message}</div>
+<div style="text-align: center">系统出现了一点小小的错误，正在紧急修复中，请耐心等待！错误原因：${pageContext.exception.message}</div>
 </body>
 </html>
