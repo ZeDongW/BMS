@@ -25,7 +25,7 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         //返回消息
-        String message = null;
+        String message;
 
         //设置编码格式
         req.setCharacterEncoding("utf-8");
@@ -45,17 +45,18 @@ public class LoginServlet extends HttpServlet {
             Users user = service.findByUnAndPwd(userName, passWord);
 
             //用户不为空，登陆成功
-            if (user != null){
+            if (user != null) {
                 //获取Session对象
                 HttpSession session = req.getSession();
 
                 //将登录用户对象放入Session中
-                session.setAttribute("loginUser",user);
+                session.setAttribute("loginUser", user);
 
                 //重定向到功能菜单
                 resp.sendRedirect(req.getContextPath() + "/index");
                 return;
-            } else { //登录失败有， 密码错误
+            } else {
+                //登录失败， 密码错误
                 message = "密码错误，请输入正确密码";
             }
         } else { //用户名不存在
@@ -67,7 +68,6 @@ public class LoginServlet extends HttpServlet {
 
         //登录失败，转发失败信息到登录页面
         req.getRequestDispatcher("/WEB-INF/page/login.jsp").forward(req, resp);
-        return;
     }
 
     @Override

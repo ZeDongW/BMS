@@ -45,13 +45,26 @@ public class RegistServlet extends HttpServlet {
             //将注册返回信息封装到request中
             req.setAttribute("message", message);
         } else {
+            if (user.getUserName() == null) {
+                message = "用户名不能为空";
+                req.setAttribute("message", message);
+                //转发到登录页面
+                req.getRequestDispatcher("WEB-INF/page/login.jsp").forward(req, resp);
+                return;
+            }
+            if (user.getPassWord() == null) {
+                message = "密码不能为空";
+                req.setAttribute("message", message);
+                //转发到登录页面
+                req.getRequestDispatcher("WEB-INF/page/login.jsp").forward(req, resp);
+                return;
+            }
             //添加用户
             service.addUsers(user);
 
             //将注册返回信息封装到request中
             req.setAttribute("success", success);
         }
-
         //转发到登录页面
         req.getRequestDispatcher("WEB-INF/page/login.jsp").forward(req, resp);
     }

@@ -36,7 +36,6 @@ public class LogOutServlet extends HttpServlet {
 
         //转发到登陆页面
         req.getRequestDispatcher("/WEB-INF/page/login.jsp").forward(req, resp);
-        return;
     }
 
     @Override
