@@ -1,8 +1,7 @@
 package cn.zedongw.bms.service;
 
+import cn.zedongw.bms.entity.PageBean;
 import cn.zedongw.bms.entity.Users;
-
-import java.util.ArrayList;
 
 /**
  * @InterfaceName IUsersService
@@ -60,22 +59,24 @@ public interface IUsersService {
     Users findUsersById(String id);
 
     /**
-     * Description: 查找所有用户
-     * @methodName: findAllUsers
-     * @param
+     * Description: 分页查找所有用户
+     *
+     * @param pb 1
      * @throws
-     * @return: java.util.ArrayList<cn.zedongw.bms.entity.Users>
+     * @methodName: findAllUsers
+     * @return: void
      * @author: ZeDongW
-     * @date: 2020/3/29 0029 13:56
+     * @date: 2020/3/30 0030 14:02
      */
-    ArrayList<Users> findAllUsers();
+    void findAllUsers(PageBean<Users> pb);
 
     /**
      * Description: 根据用户名密码查找用户
-     * @methodName: findByUnAndPwd
+     *
      * @param userName 1
      * @param passWord 2
      * @throws
+     * @methodName: findByUnAndPwd
      * @return: cn.zedongw.bms.entity.Users
      * @author: ZeDongW
      * @date: 2020/3/29 0029 13:56

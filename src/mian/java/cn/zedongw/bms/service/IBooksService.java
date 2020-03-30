@@ -1,8 +1,7 @@
 package cn.zedongw.bms.service;
 
 import cn.zedongw.bms.entity.Books;
-
-import java.util.ArrayList;
+import cn.zedongw.bms.entity.PageBean;
 
 /**
  * @InterfaceName IBooksService
@@ -60,13 +59,15 @@ public interface IBooksService {
     Books findBooksById(String id);
 
     /**
-     * 功能描述: 查找所有书本
-     * @methodName: findAllBooks
+     * Description: 分页查找所有书本
+     *
+     * @param pb 1
      * @throws
-     * @return: java.util.List<cn.zedongw.bms.entity.Books>
+     * @methodName: findAllBooks
+     * @return: void
      * @author: ZeDongW
-     * @date: 2020/3/28 0028 19:43
+     * @date: 2020/3/30 0030 14:01
      */
-    ArrayList<Books> findAllBooks();
+    void findAllBooks(PageBean<Books> pb);
 
 }

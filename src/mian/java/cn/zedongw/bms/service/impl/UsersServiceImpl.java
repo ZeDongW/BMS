@@ -2,10 +2,9 @@ package cn.zedongw.bms.service.impl;
 
 import cn.zedongw.bms.dao.IUsersDao;
 import cn.zedongw.bms.dao.impl.UsersDaoImpl;
+import cn.zedongw.bms.entity.PageBean;
 import cn.zedongw.bms.entity.Users;
 import cn.zedongw.bms.service.IUsersService;
-
-import java.util.ArrayList;
 
 /**
  * @Author ZeDongW
@@ -44,8 +43,8 @@ public class UsersServiceImpl implements IUsersService {
     }
 
     @Override
-    public ArrayList<Users> findAllUsers() {
-        return dao.findAll();
+    public void findAllUsers(PageBean<Users> pb) {
+        dao.findAll(pb);
     }
 
     @Override

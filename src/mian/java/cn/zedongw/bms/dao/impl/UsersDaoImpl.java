@@ -1,6 +1,7 @@
 package cn.zedongw.bms.dao.impl;
 
 import cn.zedongw.bms.dao.IUsersDao;
+import cn.zedongw.bms.entity.PageBean;
 import cn.zedongw.bms.entity.Users;
 import cn.zedongw.bms.utils.JdbcUtils;
 import org.apache.commons.dbutils.QueryRunner;
@@ -27,18 +28,17 @@ public class UsersDaoImpl implements IUsersDao {
      */
     private String sql;
 
-    public UsersDaoImpl() {
-    }
+
+    /**
+     * 获取QueryRunner操作对象
+     */
+    private QueryRunner queryRunner = JdbcUtils.getQueryRunner();
 
     @Override
     public void add(Users user) {
+        //新增用户sql
+        sql = "insert into users(id, userName, passWord) values (?, ?, MD5(?))";
         try {
-            //新增用户sql
-            sql = "insert into users(id, userName, passWord) values (?, ?, MD5(?))";
-
-            //获取QueryRunner操作对象
-            QueryRunner queryRunner = JdbcUtils.getQueryRunner();
-
             //执行更新
             queryRunner.update(sql, user.getId(), user.getUserName(), user.getPassWord());
         } catch (SQLException e) {
@@ -48,13 +48,9 @@ public class UsersDaoImpl implements IUsersDao {
 
     @Override
     public void delete(String id) {
+        //删除sql
+        sql = "delete from users where id = ?";
         try {
-            //删除sql
-            sql = "delete from users where id = ?";
-
-            //获取QueryRunner操作对象
-            QueryRunner queryRunner = JdbcUtils.getQueryRunner();
-
             //执行更新
             queryRunner.update(sql, id);
         } catch (SQLException e) {
@@ -64,13 +60,9 @@ public class UsersDaoImpl implements IUsersDao {
 
     @Override
     public void update(Users user) {
+        //修改sql
+        sql = "update users set passWord = MD5(?) where id = ?";
         try {
-            //修改sql
-            sql = "update users set passWord = MD5(?) where id = ?";
-
-            //获取QueryRunner操作对象
-            QueryRunner queryRunner = JdbcUtils.getQueryRunner();
-
             //执行更新
             queryRunner.update(sql, user.getPassWord(), user.getId());
         } catch (SQLException e) {
@@ -79,18 +71,36 @@ public class UsersDaoImpl implements IUsersDao {
     }
 
     @Override
-    public ArrayList<Users> findAll() {
+    public void findAll(PageBean<Users> pb) {
+        //获取总记录数
+        pb.setTotalCount(getTotalCount());
 
+        //初始化总页数
+        pb.setTotalPage();
+
+        //设置当前页数
+        if (pb.getCurrPage() < 1) {
+            //当前查询页小于1，设置为1
+            pb.setCurrPage(1);
+        } else if (pb.getCurrPage() > pb.getTotalPage()) {
+            //当前查询页大于当前页数，设置为最大页数
+            pb.setCurrPage(pb.getTotalPage());
+        }
+
+        //当前页数
+        int currPage = pb.getCurrPage();
+
+        //查询行数
+        int pageCount = pb.getPageCount();
+
+        //查询起始行
+        int index = (currPage - 1) * pageCount;
+
+        //查找sql
+        sql = "select * from users limit ?, ?";
         try {
-            //查找sql
-            sql = "select * from users";
-
-            //获取QueryRunner操作对象
-            QueryRunner queryRunner = JdbcUtils.getQueryRunner();
-
             //执行查询
-            return (ArrayList<Users>) queryRunner.query(sql, new BeanListHandler<>(Users.class));
-
+            pb.setPageData((ArrayList<Users>) queryRunner.query(sql, new BeanListHandler<>(Users.class), index, pageCount));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -98,16 +108,11 @@ public class UsersDaoImpl implements IUsersDao {
 
     @Override
     public Users findById(String id) {
+        //查找sql
+        sql = "select * from users where id = ?";
         try {
-            //查找sql
-            sql = "select * from users where id = ?";
-
-            //获取QueryRunner操作对象
-            QueryRunner queryRunner = JdbcUtils.getQueryRunner();
-
             //执行查询
             return queryRunner.query(sql, new BeanHandler<>(Users.class), id);
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -115,16 +120,11 @@ public class UsersDaoImpl implements IUsersDao {
 
     @Override
     public Users findByUnAndPwd(String userName, String passWord) {
+        //查找sql
+        sql = "select * from users where userName = ? and passWord = MD5(?)";
         try {
-            //查找sql
-            sql = "select * from users where userName = ? and passWord = MD5(?)";
-
-            //获取QueryRunner操作对象
-            QueryRunner queryRunner = JdbcUtils.getQueryRunner();
-
             //执行查询
             return queryRunner.query(sql, new BeanHandler<>(Users.class), userName, passWord);
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -132,20 +132,25 @@ public class UsersDaoImpl implements IUsersDao {
 
     @Override
     public Boolean userNameExists(String userName) {
+        //查找sql
+        sql = "select count(1) from users where userName = ?";
         try {
-            //查找sql
-            sql = "select count(1) from users where userName = ?";
-
-            //获取QueryRunner操作对象
-            QueryRunner queryRunner = JdbcUtils.getQueryRunner();
-
             Long count = queryRunner.query(sql, new ScalarHandler<>(), userName);
-
             return count >= 1;
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
+    @Override
+    public int getTotalCount() {
+        //查询SQL
+        sql = "select count(1) from users";
+        try {
+            //执行查询
+            return queryRunner.query(sql, new ScalarHandler<Long>()).intValue();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

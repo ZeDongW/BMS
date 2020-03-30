@@ -1,9 +1,11 @@
 package cn.zedongw.bms.servlet.user;
 
+import cn.zedongw.bms.entity.PageBean;
 import cn.zedongw.bms.entity.Users;
 import cn.zedongw.bms.service.IUsersService;
 import cn.zedongw.bms.service.impl.UsersServiceImpl;
 import cn.zedongw.bms.servlet.BaseServlet;
+import cn.zedongw.bms.utils.PageBeanUtils;
 import cn.zedongw.bms.utils.comparator.Sort;
 
 import javax.servlet.ServletException;
@@ -39,19 +41,35 @@ public class UsersServlet extends BaseServlet {
         //实例化用户业务逻辑层
         IUsersService service = new UsersServiceImpl();
 
-        //查询所有用户
-        ArrayList<Users> usersList = service.findAllUsers();
+        //实例化分页查询对象
+        PageBean<Users> usersPb = new PageBean<>();
 
-        //获取排序属性
+        //从request中获取分页实体
+        PageBean<Users> usersPb2 = (PageBean<Users>) req.getSession().getAttribute("usersPb");
+
+        //封装分页实体
+        PageBeanUtils.initPageBean(req, usersPb, usersPb2);
+
+        //获取所有用户
+        service.findAllUsers(usersPb);
+
+        //获取排序信息
         String sort = req.getParameter("sort");
 
-        //根据排序属性排序
-        usersList = Sort.sort(usersList,sort);
+        //获取用户集合
+        ArrayList<Users> usersList = usersPb.getPageData();
 
-        //将书本列表封装到request中
-        req.setAttribute("usersList", usersList);
+        //给用户排序
+        Sort.sort(usersList, sort);
+
+        //将排序后的对象放入分页查询对象中
+        usersPb.setPageData(usersList);
+
+        //将集合放入请求中
+        req.getSession().setAttribute("usersPb", usersPb);
 
         //重定向到用户列表页面
         req.getRequestDispatcher("/WEB-INF/page/users.jsp").forward(req, resp);
     }
+
 }

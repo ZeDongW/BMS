@@ -3,9 +3,8 @@ package cn.zedongw.bms.service.impl;
 import cn.zedongw.bms.dao.IBooksDao;
 import cn.zedongw.bms.dao.impl.BooksDaoImpl;
 import cn.zedongw.bms.entity.Books;
+import cn.zedongw.bms.entity.PageBean;
 import cn.zedongw.bms.service.IBooksService;
-
-import java.util.ArrayList;
 
 /**
  * @Author ZeDongW
@@ -40,11 +39,11 @@ public class BooksServiceImpl implements IBooksService {
 
     @Override
     public Books findBooksById(String id) {
-       return (Books) dao.findById(id);
+        return dao.findById(id);
     }
 
     @Override
-    public ArrayList<Books> findAllBooks() {
-        return dao.findAll();
+    public void findAllBooks(PageBean<Books> pb) {
+        dao.findAll(pb);
     }
 }
