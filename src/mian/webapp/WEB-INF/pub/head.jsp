@@ -7,5 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <div style="text-align: center;">
-    欢迎登陆， <span style="font-size: 15px; color: green">${loginUser.userName}</span>
+    欢迎登陆， <span style="font-size: 15px; color: green">${loginUser.userName}</span>&nbsp;&nbsp;&nbsp;<a
+        href='${pageContext.request.contextPath}/onLineSet'>在线用户列表</a>
 </div>

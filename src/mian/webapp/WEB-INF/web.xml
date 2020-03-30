@@ -6,11 +6,23 @@
     <filter>
         <filter-name>loginFilter</filter-name>
         <filter-class>cn.zedongw.bms.filter.LoginFilter</filter-class>
+        <init-param>
+            <param-name>ignores</param-name>
+            <param-value>login,login.jsp,regist,logOut,.js,.css</param-value>
+        </init-param>
     </filter>
     <filter-mapping>
         <filter-name>loginFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <listener>
+        <listener-class>cn.zedongw.bms.listener.OnLineListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>cn.zedongw.bms.listener.OffLineListener</listener-class>
+    </listener>
 
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
@@ -64,6 +76,10 @@
         <servlet-name>UpdateBookServlet</servlet-name>
         <servlet-class>cn.zedongw.bms.servlet.book.UpdateBookServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>OnLineSetServlet</servlet-name>
+        <servlet-class>cn.zedongw.bms.servlet.user.OnLineSetServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -116,6 +132,10 @@
     <servlet-mapping>
         <servlet-name>UpdateBookServlet</servlet-name>
         <url-pattern>/updateBook</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OnLineSetServlet</servlet-name>
+        <url-pattern>/onLineSet</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

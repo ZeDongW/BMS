@@ -4,12 +4,14 @@ import cn.zedongw.bms.entity.Users;
 import cn.zedongw.bms.service.IUsersService;
 import cn.zedongw.bms.service.impl.UsersServiceImpl;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * @Author ZeDongW
@@ -51,6 +53,17 @@ public class LoginServlet extends HttpServlet {
 
                 //将登录用户对象放入Session中
                 session.setAttribute("loginUser", user);
+
+                //获取ServletContext对象
+                ServletContext servletContext = req.getServletContext();
+
+                //从ServletContext对象中获取在线用户列表
+                Set<Users> onLineSet = (Set<Users>) servletContext.getAttribute("onLineSet");
+
+                //在线列表存在，将该登录用户添加到在线用户列表中
+                if (onLineSet != null) {
+                    onLineSet.add(user);
+                }
 
                 //重定向到功能菜单
                 resp.sendRedirect(req.getContextPath() + "/index");
