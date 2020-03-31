@@ -17,14 +17,15 @@ import java.util.Scanner;
 public interface IUsersDao {
     /**
      * 功能描述: 查看所有用户
-     * @methodName: showUsers
+     *
      * @param users 1
      * @throws
+     * @methodName: showUsers
      * @return: void
      * @author: ZeDongW
      * @date: 2020/3/18 0018 8:44
      */
-    public void showUsers(ArrayList<Users> users);
+    void showUsers(ArrayList<Users> users);
 
     /**
      * 功能描述: 管理员删除用户
@@ -38,7 +39,7 @@ public interface IUsersDao {
      * @author: ZeDongW
      * @date: 2020/3/18 0018 8:45
      */
-    public void deleteUser(ArrayList<Users> users, Document domUsers, Scanner sc) throws IllegalAccessException, IOException;
+    void deleteUser(ArrayList<Users> users, Document domUsers, Scanner sc) throws IllegalAccessException, IOException;
 
     /**
      * 功能描述: 管理员修改用户
@@ -52,7 +53,7 @@ public interface IUsersDao {
      * @author: ZeDongW
      * @date: 2020/3/18 0018 8:45
      */
-    public void updateUser(ArrayList<Users> users, Document domUsers, Scanner sc) throws IllegalAccessException, IOException;
+    void updateUser(ArrayList<Users> users, Document domUsers, Scanner sc) throws IllegalAccessException, IOException;
 
     /**
      * 功能描述: 普通用户修改密码
@@ -67,7 +68,7 @@ public interface IUsersDao {
      * @author: ZeDongW
      * @date: 2020/3/18 0018 8:46
      */
-    public void updatePassword(ArrayList<Users> users, Users user, Document domUsers, Scanner sc) throws IllegalAccessException, IOException;
+    void updatePassword(ArrayList<Users> users, Users user, Document domUsers, Scanner sc) throws IllegalAccessException, IOException;
 
     /**
      * 功能描述: 普通用户修改用户名
@@ -82,5 +83,5 @@ public interface IUsersDao {
      * @author: ZeDongW
      * @date: 2020/3/18 0018 8:46
      */
-    public void updateUserName(ArrayList<Users> users, Users user, Document domUsers, Scanner sc) throws IllegalAccessException, IOException;
+    void updateUserName(ArrayList<Users> users, Users user, Document domUsers, Scanner sc) throws IllegalAccessException, IOException;
 }
