@@ -70,10 +70,10 @@ public class LoginServlet extends HttpServlet {
                 return;
             } else {
                 //登录失败， 密码错误
-                message = "密码错误，请输入正确密码";
+                message = "4";
             }
         } else { //用户名不存在
-            message = "用户名不存在";
+            message = "1";
         }
 
         //将返回消息封装到request中

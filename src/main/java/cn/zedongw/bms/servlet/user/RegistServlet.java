@@ -25,10 +25,10 @@ public class RegistServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         //注册信息
-        String message = "该用户名已被注册";
+        String message;
 
         //成功信息
-        String success = "注册成功，请登录";
+        String success = "1";
 
         //设置编码格式
         req.setCharacterEncoding("utf-8");
@@ -41,19 +41,23 @@ public class RegistServlet extends HttpServlet {
         Users user = UsersUtil.getBean(req, IDUtils.getUuid());
 
         //查看用户名是否存在
-        if (service.userNameExists(user.getUserName())){
+        if (service.userNameExists(user.getUserName())) {
+            //"该用户名已被注册
+            message = "5";
             //将注册返回信息封装到request中
             req.setAttribute("message", message);
         } else {
             if (user.getUserName() == null) {
-                message = "用户名不能为空";
+                //用户名为空
+                message = "2";
                 req.setAttribute("message", message);
                 //转发到登录页面
                 req.getRequestDispatcher("WEB-INF/page/login.jsp").forward(req, resp);
                 return;
             }
             if (user.getPassWord() == null) {
-                message = "密码不能为空";
+                //密码为空
+                message = "3";
                 req.setAttribute("message", message);
                 //转发到登录页面
                 req.getRequestDispatcher("WEB-INF/page/login.jsp").forward(req, resp);

@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: ZeDongW
@@ -6,11 +7,14 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
+<fmt:setBundle basename="msg" var="bundle"/>
+<fmt:setLocale value="${pageContext.request.locale}"/>
 <html>
 <head>
-    <title>资源不存在</title>
+    <title><fmt:message key="NotFound" bundle="${bundle}"/></title>
 </head>
 <body>
-<div style="text-align: center">亲，您访问的页面不存在，返回<a href="${pageContext.request.contextPath}/index">首页</a></div>
+<div style="text-align: center"><fmt:message key="NotFoundMessage" bundle="${bundle}"/><a
+        href="${pageContext.request.contextPath}/index"><fmt:message key="Index" bundle="${bundle}"/></a></div>
 </body>
 </html>

@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: ZeDongW
@@ -6,11 +7,14 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" isErrorPage="true" %>
+<fmt:setBundle basename="msg" var="bundle"/>
+<fmt:setLocale value="${pageContext.request.locale}"/>
 <html>
 <head>
-    <title>系统出错</title>
+    <title><fmt:message key="ErrorPage" bundle="${bundle}"/></title>
 </head>
 <body>
-<div style="text-align: center">系统出现了一点小小的错误，正在紧急修复中，请耐心等待！错误原因：${pageContext.exception.message}</div>
+<div style="text-align: center"><fmt:message key="ErrorMessage"
+                                             bundle="${bundle}"/>${pageContext.exception.message}</div>
 </body>
 </html>

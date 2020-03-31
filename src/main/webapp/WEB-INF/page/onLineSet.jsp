@@ -7,19 +7,22 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setBundle basename="msg" var="bundle"/>
+<fmt:setLocale value="${pageContext.request.locale}"/>
 <html>
 <head>
-    <title>在线用户列表</title>
+    <title><fmt:message key="OnLineList" bundle="${bundle}"/></title>
 </head>
 <body>
 <jsp:include page="../pub/head.jsp"></jsp:include>
 <div style="text-align: center">
-    <h3>在线列表展示</h3>
+    <h3><fmt:message key="OnLineList" bundle="${bundle}"/></h3>
 </div>
 <table align="center" cellpadding="0" cellspacing="1" width="80%" border="1">
     <tr>
-        <td>编号</td>
-        <td>姓名</td>
+        <td><fmt:message key="ID" bundle="${bundle}"/></td>
+        <td><fmt:message key="userName" bundle="${bundle}"/></td>
     </tr>
     <c:if test="${not empty onLineSet}">
         <c:forEach var="user" items="${onLineSet}" varStatus="vs">
@@ -32,9 +35,10 @@
 </table>
 
 <div style="text-align: center">
-    <a href='${pageContext.request.contextPath}/index'>返回主页</a>&nbsp;&nbsp;&nbsp;
-    <a href='${pageContext.request.contextPath}/queryUser?id=${user.id}'>修改密码</a>&nbsp;&nbsp;&nbsp;
-    <a href='${pageContext.request.contextPath}/logOut'>安全退出</a></center>
+    <a href='${pageContext.request.contextPath}/index'><fmt:message key="Home" bundle="${bundle}"/></a>&nbsp;&nbsp;&nbsp;
+    <a href='${pageContext.request.contextPath}/queryUser?id=${user.id}'><fmt:message key="passWordUpdate"
+                                                                                      bundle="${bundle}"/></a>&nbsp;&nbsp;&nbsp;
+    <a href='${pageContext.request.contextPath}/logOut'><fmt:message key="logout" bundle="${bundle}"/></a></center>
 </div>
 </body>
 </html>

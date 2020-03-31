@@ -1,8 +1,3 @@
-function arr(value) {
-    const form = document.getElementById("form");
-    form.setAttribute("action", value)
-}
-
 function checkUserName() {
     const userId = document.getElementById("userNameCheck");
     const userName = document.getElementById("userName").value;
