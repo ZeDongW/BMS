@@ -24,7 +24,7 @@ public interface Dao <T> {
      * @author: ZeDongW
      * @date: 2020/3/18 0018 12:17
      */
-    public void add(T t, String id) throws DocumentException, IllegalAccessException;
+    void add(T t, String id) throws DocumentException, IllegalAccessException;
 
     /**
      * 功能描述: 删除
@@ -37,7 +37,7 @@ public interface Dao <T> {
      * @author: ZeDongW
      * @date: 2020/3/18 0018 12:17
      */
-    public void delete(T t, String id) throws DocumentException, IllegalAccessException ;
+    void delete(T t, String id) throws DocumentException, IllegalAccessException;
 
     /**
      * 功能描述: 更新
@@ -50,7 +50,7 @@ public interface Dao <T> {
      * @author: ZeDongW
      * @date: 2020/3/18 0018 12:36
      */
-    public void update(T t, String id) throws IllegalAccessException, DocumentException ;
+    void update(T t, String id) throws IllegalAccessException, DocumentException;
 
     /**
      * 功能描述: 修改
@@ -64,7 +64,7 @@ public interface Dao <T> {
      * @author: ZeDongW
      * @date: 2020/3/18 0018 12:19
      */
-    public ArrayList<T> findAll(T t) throws ParseException, InstantiationException, DocumentException, IllegalAccessException;
+    ArrayList<T> findAll(T t) throws ParseException, InstantiationException, DocumentException, IllegalAccessException;
 
     /**
      * 功能描述: 根据id查找
@@ -78,5 +78,5 @@ public interface Dao <T> {
      * @author: ZeDongW
      * @date: 2020/3/18 0018 12:20
      */
-    public T findById(T t, String id) throws DocumentException, IllegalAccessException, InstantiationException;
+    T findById(T t, String id) throws DocumentException, IllegalAccessException, InstantiationException;
 }
