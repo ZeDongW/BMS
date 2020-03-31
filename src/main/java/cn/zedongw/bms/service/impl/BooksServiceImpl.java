@@ -40,7 +40,7 @@ public class BooksServiceImpl implements IBooksService {
 
     @Override
     public Books findBooksById(String id) {
-       return (Books) dao.findById(id);
+       return dao.findById(id);
     }
 
     @Override

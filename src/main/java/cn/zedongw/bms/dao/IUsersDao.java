@@ -25,7 +25,7 @@ public interface IUsersDao {
      * @author: ZeDongW
      * @date: 2020/3/28 0028 19:54
      */
-    public void add(Users user);
+    void add(Users user);
 
     /**
      * Description: 根据ID删除用户
@@ -37,7 +37,7 @@ public interface IUsersDao {
      * @author: ZeDongW
      * @date: 2020/3/28 0028 19:55
      */
-    public void delete(String id);
+    void delete(String id);
 
     /**
      * Description: 更新用户
@@ -49,17 +49,18 @@ public interface IUsersDao {
      * @author: ZeDongW
      * @date: 2020/3/28 0028 19:55
      */
-    public void update(Users user);
+    void update(Users user);
 
     /**
      * Description: 查询所有用户
+     *
      * @throws
      * @methodName: findAll
      * @return: java.util.ArrayList<cn.zedongw.bms.entity.Users>
      * @author: ZeDongW
      * @date: 2020/3/28 0028 19:56
      */
-    public ArrayList<Users> findAll();
+    ArrayList<Users> findAll();
 
     /**
      * Description: 根据ID查找用户
@@ -71,7 +72,7 @@ public interface IUsersDao {
      * @author: ZeDongW
      * @date: 2020/3/28 0028 20:00
      */
-    public Users findById(String id);
+    Users findById(String id);
 
     /**
      * Description:  根据用户名密码查找用户
@@ -84,7 +85,7 @@ public interface IUsersDao {
      * @author: ZeDongW
      * @date: 2020/3/28 0028 20:00
      */
-    public Users findByUnAndPwd(String userName, String passWord);
+    Users findByUnAndPwd(String userName, String passWord);
 
     /**
      * Description: 判断用户名是否存在
@@ -96,6 +97,6 @@ public interface IUsersDao {
      * @author: ZeDongW
      * @date: 2020/3/28 0028 20:02
      */
-    public Boolean userNameExists(String userName);
+    Boolean userNameExists(String userName);
 
 }
