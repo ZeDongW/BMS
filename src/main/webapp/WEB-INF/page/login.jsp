@@ -1,51 +1,44 @@
 <%@page language="java" pageEncoding="UTF-8" isELIgnored="false" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<fmt:setBundle basename="msg" var="bundle"/>
-<fmt:setLocale value="${pageContext.request.locale}"/>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <html>
 <head>
-    <title><fmt:message key="BMS" bundle="${bundle}"/></title>
+    <title><s:text name="BMS"/></title>
 </head>
 <body>
 <div style="text-align: center">
-    <h2><fmt:message key="welcome" bundle="${bundle}"/></h2>
-    <form action="" method="post" name="form" onsubmit="return checkForm()">
-        <fmt:message key="userName" bundle="${bundle}"/>：<input type="text" name="userName" onblur="checkUserName()"
-                                                                id="userName"/><span
-            id="userNameCheck"></span><br>
+    <h2><s:text name="welcome"/></h2>
+    <s:form action="users_login" method="post" name="form" onsubmit="return checkForm()">
+        <s:text name="userName"/>：<s:textfield name="userName" onblur="checkUserName()" id="userName"/><span id="userNameCheck"></span><br>
         <div style="align-content: center; color: red">
             <c:choose>
                 <c:when test='${"1" eq message}'>
-                    <fmt:message key="useNameNotExist" bundle="${bundle}"/>
+                    <s:text name="useNameNotExist"/>
                 </c:when>
                 <c:when test='${"2" eq message}'>
-                    <fmt:message key="useNameNull" bundle="${bundle}"/>
+                    <s:text name="useNameNull"/>
                 </c:when>
                 <c:when test='${"3" eq message}'>
-                    <fmt:message key="passWordNull" bundle="${bundle}"/>
+                    <s:text name="passWordNull"/>
                 </c:when>
                 <c:when test='${"4" eq message}'>
-                    <fmt:message key="passWordError" bundle="${bundle}"/>
+                    <s:text name="passWordError"/>
                 </c:when>
                 <c:when test='${"5" eq message}'>
-                    <fmt:message key="userNameUsed" bundle="${bundle}"/>
+                    <s:text name="userNameUsed"/>
                 </c:when>
             </c:choose>
+            <s:fielderror fieldName="userName"/><s:fielderror fieldName="passWord"/>
         </div>
-        <fmt:message key="passWord" bundle="${bundle}"/>：<input type="password" name="passWord" onblur="checkPassWord()"
-                                                                id="passWord"/><span
-            id="passWordCheck"></span><br>
+        <s:text name="passWord"/>：<s:password name="passWord" onblur="checkPassWord()" id="passWord"/><span id="passWordCheck"></span><br>
         <div style="align-content: center; color: green">
             <c:if test="${not empty success}">
-                <fmt:message key="registSuccess" bundle="${bundle}"/>
+                <s:text name="registSuccess"/>
             </c:if>
         </div>
-        <input type="submit" onclick='form.action="${pageContext.request.contextPath}/regist"'
-               value='<fmt:message key="regist" bundle="${bundle}"/>'/>
-        <input type="submit" onclick='form.action="${pageContext.request.contextPath}/login"'
-               value='<fmt:message key="login" bundle="${bundle}"/>'/>
-    </form>
+        <input type="submit" onclick='form.action="users_regist"' value='<s:text name="regist"/>'/>
+        <input type="submit" onclick='form.action="users_login"' value='<s:text name="login"/>'/>
+    </s:form>
 </div>
 
 </body>

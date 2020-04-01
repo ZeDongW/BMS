@@ -1,12 +1,13 @@
 package cn.zedongw.bms.entity;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
  * @author ：ZeDongW
  * @version : 1.0
  * @ClassName : Books
- * @description：图书管理系统书本实体类
+ * @description： 图书管理系统书本实体类
  * @modified By：
  * @date ：Created in 2019/01/22/0022 22:44
  */
@@ -45,12 +46,12 @@ public class Books {
     /**
      * 出版日期
      */
-    private String publishDate;
+    private Date publishDate;
 
     public Books() {
     }
 
-    public Books(String id, String bookName, String bookAuthor, String publisher, double price, int bookNum, String publishDate) {
+    public Books(String id, String bookName, String bookAuthor, String publisher, double price, int bookNum, Date publishDate) {
         this.id = id;
         this.bookName = bookName;
         this.bookAuthor = bookAuthor;
@@ -108,11 +109,11 @@ public class Books {
         this.bookNum = bookNum;
     }
 
-    public String getPublishDate() {
+    public Date getPublishDate() {
         return publishDate;
     }
 
-    public void setPublishDate(String publishDate) {
+    public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
     }
 
@@ -147,7 +148,7 @@ public class Books {
                 ", publisher='" + publisher + '\'' +
                 ", price=" + price +
                 ", bookNum=" + bookNum +
-                ", publishDate='" + publishDate + '\'' +
+                ", publishDate=" + publishDate +
                 '}';
     }
 }

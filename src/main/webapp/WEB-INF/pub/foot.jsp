@@ -1,4 +1,4 @@
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: ZeDongW
@@ -7,11 +7,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
-<fmt:setBundle basename="msg" var="bundle"/>
-<fmt:setLocale value="${pageContext.request.locale}"/>
 <div style="text-align: center">
-    <a href='${pageContext.request.contextPath}/index'><fmt:message key="Home" bundle="${bundle}"/></a>&nbsp;&nbsp;&nbsp;
-    <a href='${pageContext.request.contextPath}/queryUser?id=${loginUser.id}'><fmt:message key="passWordUpdate"
-                                                                                           bundle="${bundle}"/></a>&nbsp;&nbsp;&nbsp;
-    <a href='${pageContext.request.contextPath}/logOut'><fmt:message key="logout" bundle="${bundle}"/></a></center>
+    <s:a href='users_index'><s:text name="Home"/></s:a>&nbsp;&nbsp;&nbsp;
+    <s:a href='users_query?id=%{#session.loginUser.id}'><s:text name="passWordUpdate"/></s:a>&nbsp;&nbsp;&nbsp;
+    <s:a href='users_logOut'><s:text name="logout"/></s:a></center>
 </div>

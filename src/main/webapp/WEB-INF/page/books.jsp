@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: ZeDongW
@@ -8,11 +8,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" pageEncoding="UTF-8" %>
-<fmt:setBundle basename="msg" var="bundle"/>
-<fmt:setLocale value="${pageContext.request.locale}"/>
 <html>
 <head>
-    <title><fmt:message key="BooksManager" bundle="${bundle}"/></title>
+    <title><s:text name="BooksManager"/></title>
     <style type='text/css'>
         table td {
             text-align: center;
@@ -26,95 +24,68 @@
 <body>
 <jsp:include page="../pub/head.jsp"></jsp:include>
 <div style="text-align: center">
-    <h3><fmt:message key="BooksManager" bundle="${bundle}"/></h3>
+    <h3><s:text name="BooksManager"/></h3>
 </div>
 <table align='center' border='1' width='800px'>
     <tr>
-        <th><a href='${pageContext.request.contextPath}/books?sort=bookId'><fmt:message key="ID"
-                                                                                        bundle="${bundle}"/></a></th>
-        <th><a href='${pageContext.request.contextPath}/books?sort=bookName'><fmt:message key="bookName"
-                                                                                          bundle="${bundle}"/></a></th>
-        <th><a href='${pageContext.request.contextPath}/books?sort=bookAuthor'><fmt:message key="author"
-                                                                                            bundle="${bundle}"/></a>
-        </th>
-        <th><a href='${pageContext.request.contextPath}/books?sort=bookPublisher'><fmt:message key="publisher"
-                                                                                               bundle="${bundle}"/></a>
-        </th>
-        <th><a href='${pageContext.request.contextPath}/books?sort=bookPrice'><fmt:message key="price"
-                                                                                           bundle="${bundle}"/></a></th>
-        <th><a href='${pageContext.request.contextPath}/books?sort=bookNum'><fmt:message key="bookNum"
-                                                                                         bundle="${bundle}"/></a></th>
-        <th><a href='${pageContext.request.contextPath}/books?sort=bookPublishDate'><fmt:message key="publishDate"
-                                                                                                 bundle="${bundle}"/></a>
-        </th>
-        <th><fmt:message key="option" bundle="${bundle}"/></th>
+        <th><s:a href='books_list?sort=bookId'><s:text name="ID"/></s:a></th>
+        <th><s:a href='books_list?sort=bookName'><s:text name="bookName"/></s:a></th>
+        <th><s:a href='books_list?sort=bookAuthor'><s:text name="author"/></s:a></th>
+        <th><s:a href='books_list?sort=bookPublisher'><s:text name="publisher" /></s:a></th>
+        <th><s:a href='books_list?sort=bookPrice'><s:text name="price"/></s:a></th>
+        <th><s:a href='books_list?sort=bookNum'><s:text name="bookNum"/></s:a></th>
+        <th><s:a href='books_list?sort=bookPublishDate'><s:text name="publishDate"/></s:a></th>
+        <th><s:text name="option"/></th>
     </tr>
-    <c:if test="${not empty booksPb.pageData}">
-        <c:forEach items="${booksPb.pageData}" var="book">
+    <s:if test="%{#request.booksPb.pageData.size()!=0}">
+        <s:iterator value="%{#request.booksPb.pageData}" var="book">
             <tr>
-                <td>${book.id}</td>
-                <td>${book.bookName}</td>
-                <td>${book.bookAuthor}</td>
-                <td>${book.publisher}</td>
-                <td>${book.price}</td>
-                <td>${book.bookNum}</td>
-                <td>${book.publishDate}</td>
-                <td><a href='${pageContext.request.contextPath}/queryBook?id=${book.id}'><fmt:message key="update"
-                                                                                                      bundle="${bundle}"/></a>&nbsp;<a
-                        href='${pageContext.request.contextPath}/deleteBook?id=${book.id}'><fmt:message key="delete"
-                                                                                                        bundle="${bundle}"/></a>
-                </td>
+                <td><s:property value="#book.id"/></td>
+                <td><s:property value="#book.bookName"/></td>
+                <td><s:property value="#book.bookAuthor"/></td>
+                <td><s:property value="#book.publisher"/></td>
+                <td><s:property value="#book.price"/></td>
+                <td><s:property value="#book.bookNum"/></td>
+                <td><s:date format="yyyy-MM-dd" name="%{#book.publishDate}"/></td>
+                <td><s:a href='books_query?id=%{#book.id}'><s:text name="update"/></s:a>&nbsp;
+                    <s:a href='books_delete?id=%{#book.id}'><s:text name="delete"/></s:a></td>
             </tr>
-        </c:forEach>
-    </c:if>
+        </s:iterator>
+    </s:if>
     <tr>
-        <td colspan='8' align='center'><a href='${pageContext.request.contextPath}/queryBook'><fmt:message key="addBook"
-                                                                                                           bundle="${bundle}"/></a>
+        <td colspan='8' align='center'><s:a href='books_query'><s:text name="addBook"/></s:a>
         </td>
     </tr>
     <tr>
         <td colspan="8" align="center">
-            <fmt:message key="pageCount" bundle="${bundle}"/><input type="text" style="width: 20px"
-                                                                    value="${booksPb.pageCount}"
-                                                                    onkeyup="this.value=this.value.replace(/\D/g,'')"
-                                                                    onblur='checkPageCount()'
-                                                                    id='pageCount'/>&nbsp;&nbsp;
-            <fmt:message key="current" bundle="${bundle}"/><input type="text" style="width: 20px"
-                                                                  value="${booksPb.currPage}"
-                                                                  onkeyup="this.value=this.value.replace(/\D/g,'')"
-                                                                  onblur='checkPageCount()'
-                                                                  id='currPage'/>/${booksPb.totalPage}<fmt:message
-                key="page" bundle="${bundle}"/>&nbsp;&nbsp;
+            <s:text name="pageCount"/>
+            <s:textfield style="width: 20px" value='%{#request.booksPb.pageCount}' onkeyup="this.value=this.value.replace(/\D/g,'')" onblur='checkPageCount()' id='pageCount'/>&nbsp;&nbsp;
+            <s:text name="current"/>
+            <s:textfield style="width: 20px" value='%{#request.booksPb.currPage}' onkeyup="this.value=this.value.replace(/\D/g,'')" onblur='checkPageCount()' id='currPage'/>
+            /<s:property value="#request.booksPb.totalPage"/>
+            <s:text name="page"/>&nbsp;&nbsp;
             <c:choose>
                 <c:when test="${booksPb.currPage  == 1 && booksPb.currPage != booksPb.totalPage}">
-                    <fmt:message key="first" bundle="${bundle}"/>&nbsp;&nbsp;<fmt:message key="previous"
-                                                                                          bundle="${bundle}"/>
-                    <a href="${pageContext.request.contextPath}/books?currPage=${booksPb.currPage+1}&pageCount=${booksPb.pageCount}"><fmt:message
-                            key="next" bundle="${bundle}"/> </a>&nbsp;&nbsp;
-                    <a href="${pageContext.request.contextPath}/books?currPage=${booksPb.totalPage}&pageCount=${booksPb.pageCount}"><fmt:message
-                            key="last" bundle="${bundle}"/></a>
+                    <s:text name="first"/>&nbsp;&nbsp;<s:text name="previous"/>
+                    <s:a href="books_list?currPage=%{#request.booksPb.currPage+1}&pageCount=%{#request.booksPb.pageCount}">
+                        <s:text name="next"/> </s:a>&nbsp;&nbsp;
+                    <s:a href="books_list?currPage=%{#request.booksPb.totalPage}&pageCount=%{#request.booksPb.pageCount}">
+                        <s:text name="last"/></s:a>
                 </c:when>
                 <c:when test="${booksPb.currPage == booksPb.totalPage && booksPb.currPage  != 1 }">
-                    <a href="${pageContext.request.contextPath}/books?currPage=1&pageCount=${booksPb.pageCount}"><fmt:message
-                            key="first" bundle="${bundle}"/></a>&nbsp;&nbsp;
-                    <a href="${pageContext.request.contextPath}/books?currPage=${booksPb.currPage-1}&pageCount=${booksPb.pageCount}"><fmt:message
-                            key="previous" bundle="${bundle}"/> </a>&nbsp;&nbsp;
-                    <fmt:message key="next" bundle="${bundle}"/>&nbsp;&nbsp;<fmt:message key="last" bundle="${bundle}"/>
+                    <s:a href="books_list?currPage=1&pageCount=%{#request.booksPb.pageCount}"><s:text name="first"/></s:a>&nbsp;&nbsp;
+                    <s:a href="books_list?currPage=%{#request.booksPb.currPage-1}&pageCount=%{#request.booksPb.pageCount}"><s:text name="previous"/> </s:a>&nbsp;&nbsp;
+                    <s:text name="next"/>&nbsp;&nbsp;<s:text name="last"/>
                 </c:when>
                 <c:when test="${booksPb.currPage == booksPb.totalPage && booksPb.currPage  == 1 }">
-                    <fmt:message key="first" bundle="${bundle}"/>&nbsp;&nbsp;<fmt:message key="previous"
-                                                                                          bundle="${bundle}"/>&nbsp;&nbsp;
-                    <fmt:message key="next" bundle="${bundle}"/>&nbsp;&nbsp;<fmt:message key="last" bundle="${bundle}"/>
+                    <s:text name="first"/>&nbsp;&nbsp;<s:text name="previous"/>&nbsp;&nbsp;
+                    <s:text name="next"/>&nbsp;&nbsp;<s:text name="last"/>
                 </c:when>
                 <c:otherwise>
-                    <a href="${pageContext.request.contextPath}/books?currPage=1&pageCount=${booksPb.pageCount}"><fmt:message
-                            key="first" bundle="${bundle}"/></a>&nbsp;&nbsp;
-                    <a href="${pageContext.request.contextPath}/books?currPage=${booksPb.currPage-1}&pageCount=${booksPb.pageCount}"><fmt:message
-                            key="previous" bundle="${bundle}"/> </a>&nbsp;&nbsp;
-                    <a href="${pageContext.request.contextPath}/books?currPage=${booksPb.currPage+1}&pageCount=${booksPb.pageCount}"><fmt:message
-                            key="next" bundle="${bundle}"/> </a>&nbsp;&nbsp;
-                    <a href="${pageContext.request.contextPath}/books?currPage=${booksPb.totalPage}&pageCount=${booksPb.pageCount}"><fmt:message
-                            key="last" bundle="${bundle}"/></a>
+                    <s:a href="books_list?currPage=1&pageCount=%{#request.booksPb.pageCount}"><s:text name="first"/></s:a>&nbsp;&nbsp;
+                    <s:a href="books_list?currPage=%{#request.booksPb.currPage-1}&pageCount=%{#request.booksPb.pageCount}"><s:text name="previous"/> </s:a>&nbsp;&nbsp;
+                    <s:a href="books_list?currPage=%{#request.booksPb.currPage+1}&pageCount=%{#request.booksPb.pageCount}"><s:text name="next"/> </s:a>&nbsp;&nbsp;
+                    <s:a href="books_list?currPage=%{#request.booksPb.totalPage}&pageCount=%{#request.booksPb.pageCount}"><s:text name="last"/></s:a>
                 </c:otherwise>
                 </c:choose>
             </td>
@@ -126,7 +97,7 @@
     function checkPageCount() {
         const currPage = document.getElementById("currPage").value;
         const pageCount = document.getElementById("pageCount").value;
-        window.location.href = "${pageContext.request.contextPath}/books?currPage=" + currPage + "&pageCount=" + pageCount;
+        window.location.href = "books_list?currPage=" + currPage + "&pageCount=" + pageCount;
     }
 </script>
 </html>

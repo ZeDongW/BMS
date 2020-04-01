@@ -15,6 +15,6 @@
 </head>
 <body>
 <div style="text-align: center"><fmt:message key="NotFoundMessage" bundle="${bundle}"/><a
-        href="${pageContext.request.contextPath}/index"><fmt:message key="Index" bundle="${bundle}"/></a></div>
+        href="users_index"><fmt:message key="Index" bundle="${bundle}"/></a></div>
 </body>
 </html>

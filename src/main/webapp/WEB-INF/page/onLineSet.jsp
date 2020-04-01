@@ -7,38 +7,35 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setBundle basename="msg" var="bundle"/>
-<fmt:setLocale value="${pageContext.request.locale}"/>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <html>
 <head>
-    <title><fmt:message key="OnLineList" bundle="${bundle}"/></title>
+    <title><s:text name="OnLineList"/></title>
 </head>
 <body>
 <jsp:include page="../pub/head.jsp"></jsp:include>
 <div style="text-align: center">
-    <h3><fmt:message key="OnLineList" bundle="${bundle}"/></h3>
+    <h3><s:text name="OnLineList"/></h3>
 </div>
 <table align="center" cellpadding="0" cellspacing="1" width="80%" border="1">
     <tr>
-        <td><fmt:message key="ID" bundle="${bundle}"/></td>
-        <td><fmt:message key="userName" bundle="${bundle}"/></td>
+        <td><s:text name="ID"/></td>
+        <td><s:text name="userName"/></td>
     </tr>
-    <c:if test="${not empty onLineSet}">
-        <c:forEach var="user" items="${onLineSet}" varStatus="vs">
+    <s:if test="%{#application.onLineSet.size() != 0}">
+        <s:iterator var="user" value="%{#application.onLineSet}" status="st">
             <tr>
-                <td>${vs.count}</td>
-                <td>${user.userName}</td>
+                <td><s:property value="#st.count"/></td>
+                <td><s:property value="#user.userName"/></td>
             </tr>
-        </c:forEach>
-    </c:if>
+        </s:iterator>
+    </s:if>
 </table>
 
 <div style="text-align: center">
-    <a href='${pageContext.request.contextPath}/index'><fmt:message key="Home" bundle="${bundle}"/></a>&nbsp;&nbsp;&nbsp;
-    <a href='${pageContext.request.contextPath}/queryUser?id=${user.id}'><fmt:message key="passWordUpdate"
-                                                                                      bundle="${bundle}"/></a>&nbsp;&nbsp;&nbsp;
-    <a href='${pageContext.request.contextPath}/logOut'><fmt:message key="logout" bundle="${bundle}"/></a></center>
+    <s:a href='users_index'><s:text name="Home"/></s:a>&nbsp;&nbsp;&nbsp;
+    <s:a href='users_query?id=%{#session.loginUser.id}'><s:text name="passWordUpdate"/></s:a>&nbsp;&nbsp;&nbsp;
+    <s:a href='users_logOut'><s:text name="logout"/></s:a></center>
 </div>
 </body>
 </html>

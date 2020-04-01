@@ -1,6 +1,9 @@
 package cn.zedongw.bms.filter;
 
+import cn.zedongw.bms.action.BooksAction;
 import cn.zedongw.bms.entity.Users;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +27,10 @@ public class LoginFilter implements Filter {
     /**
      * 放行列表
      */
-    private Set<String> ignoreSet = new HashSet<String>();
+    private Set<String> ignoreSet = new HashSet<>();
+
+
+    Logger logger = LogManager.getLogger(LoginFilter.class.getName());
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -38,6 +44,7 @@ public class LoginFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
         //转换对象
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
@@ -48,6 +55,8 @@ public class LoginFilter implements Filter {
 
         //获取请求资源
         String requestUri = req.getRequestURI();
+
+        logger.info("=================================================请求URI:{}===================================================", requestUri);
 
         //符合忽略规则，直接放行
         if (isIgnore(requestUri)) {
@@ -68,8 +77,7 @@ public class LoginFilter implements Filter {
                 }
             }
             //未登录，转发到登陆页面
-            req.getRequestDispatcher("/WEB-INF/page/login.jsp").forward(req, resp);
-            return;
+           resp.sendRedirect(req.getContextPath() + "/users_toLogin");
         }
     }
 
