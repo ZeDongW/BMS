@@ -79,12 +79,14 @@ public class UsersDaoImpl implements IUsersDao {
         pb.setTotalPage();
 
         //设置当前页数
+        if (pb.getCurrPage() > pb.getTotalPage()) {
+            //当前查询页大于当前页数，设置为最大页数
+            pb.setCurrPage(pb.getTotalPage());
+        }
+
         if (pb.getCurrPage() < 1) {
             //当前查询页小于1，设置为1
             pb.setCurrPage(1);
-        } else if (pb.getCurrPage() > pb.getTotalPage()) {
-            //当前查询页大于当前页数，设置为最大页数
-            pb.setCurrPage(pb.getTotalPage());
         }
 
         //当前页数
