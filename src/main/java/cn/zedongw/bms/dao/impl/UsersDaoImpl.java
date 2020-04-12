@@ -3,13 +3,12 @@ package cn.zedongw.bms.dao.impl;
 import cn.zedongw.bms.dao.IUsersDao;
 import cn.zedongw.bms.entity.PageBean;
 import cn.zedongw.bms.entity.Users;
-import cn.zedongw.bms.utils.JdbcUtils;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
+import cn.zedongw.bms.utils.comparator.HibernateUtils;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -24,49 +23,48 @@ import java.util.ArrayList;
 public class UsersDaoImpl implements IUsersDao {
 
     /**
-     * sql
+     * 获取Hiberna的Session
      */
-    private String sql;
-
-
-    /**
-     * 获取QueryRunner操作对象
-     */
-    private QueryRunner queryRunner = JdbcUtils.getQueryRunner();
+    private final Session session = HibernateUtils.getSession();
 
     @Override
     public void add(Users user) {
         //新增用户sql
-        sql = "insert into users(id, userName, passWord) values (?, ?, MD5(?))";
+        String sql = "insert into users(id, userName, passWord) values (?1, ?2, MD5(?3))";
+        //开启事务
+        Transaction tx = session.beginTransaction();
         try {
-            //执行更新
-            queryRunner.update(sql, user.getId(), user.getUserName(), user.getPassWord());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            //新增用户
+            NativeQuery query = session.createSQLQuery(sql);
+            query.setParameter(1, user.getId());
+            query.setParameter(2, user.getUserName());
+            query.setParameter(3, user.getPassWord());
+            query.executeUpdate();
+        } finally {
+            tx.commit();
         }
     }
 
     @Override
     public void delete(String id) {
-        //删除sql
-        sql = "delete from users where id = ?";
-        try {
-            //执行更新
-            queryRunner.update(sql, id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        //删除用户
+        session.delete(new Users(id));
     }
 
     @Override
     public void update(Users user) {
         //修改sql
-        sql = "update users set passWord = MD5(?) where id = ?";
+        String sql = "update users set passWord = MD5(?1) where id = ?2";
+        //开启事务
+        Transaction tx = session.beginTransaction();
         try {
-            //执行更新
-            queryRunner.update(sql, user.getPassWord(), user.getId());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            //修改
+            NativeQuery query = session.createSQLQuery(sql);
+            query.setParameter(1, user.getPassWord());
+            query.setParameter(2, user.getId());
+            query.executeUpdate();
+        } finally {
+            tx.commit();
         }
     }
 
@@ -97,62 +95,88 @@ public class UsersDaoImpl implements IUsersDao {
 
         //查询起始行
         int index = (currPage - 1) * pageCount;
-
-        //查找sql
-        sql = "select * from users limit ?, ?";
+        //开启事务
+        Transaction tx = session.beginTransaction();
         try {
-            //执行查询
-            pb.setPageData((ArrayList<Users>) queryRunner.query(sql, new BeanListHandler<>(Users.class), index, pageCount));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            //分页查询书本
+            Query query = session.createQuery("from Users");
+
+            // 设置分页参数
+            query.setFirstResult(index);
+            query.setMaxResults(pageCount);
+
+            pb.setPageData((ArrayList<Users>) query.list());
+        } finally {
+            tx.commit();
         }
     }
 
     @Override
     public Users findById(String id) {
-        //查找sql
-        sql = "select * from users where id = ?";
+        //HQL语句
+        String hql = "from Users where id = ?1";
+        //开启事务
+        Transaction tx = session.beginTransaction();
         try {
-            //执行查询
-            return queryRunner.query(sql, new BeanHandler<>(Users.class), id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            //HQL查询
+            Query query = session.createQuery(hql);
+            //设置参数
+            query.setParameter(1, id);
+            //返回查询结果
+            return (Users) query.uniqueResult();
+        } finally {
+            tx.commit();
         }
     }
 
     @Override
     public Users findByUnAndPwd(String userName, String passWord) {
         //查找sql
-        sql = "select * from users where userName = ? and passWord = MD5(?)";
+        String sql = "select * from users where userName = ?1 and passWord = MD5(?2)";
+        //开启事务
+        Transaction tx = session.beginTransaction();
         try {
-            //执行查询
-            return queryRunner.query(sql, new BeanHandler<>(Users.class), userName, passWord);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            //修改
+            NativeQuery query = session.createSQLQuery(sql).addEntity(Users.class);
+            query.setParameter(1, userName);
+            query.setParameter(2, passWord);
+            return (Users) query.uniqueResult();
+        } finally {
+            tx.commit();
         }
     }
 
     @Override
     public Boolean userNameExists(String userName) {
-        //查找sql
-        sql = "select count(1) from users where userName = ?";
+        //HQL语句
+        String hql = "select count(u.id) from Users u where u.userName = ?1";
+        //开启事务
+        Transaction tx = session.beginTransaction();
         try {
-            Long count = queryRunner.query(sql, new ScalarHandler<>(), userName);
-            return count >= 1;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            //创建HQL查询
+            Query query = session.createQuery(hql);
+            //设置参数
+            query.setParameter(1, userName);
+            //返回查询结果
+            return (Long) query.setCacheable(true).uniqueResult() > 0;
+        } finally {
+            tx.commit();
         }
     }
 
     @Override
     public int getTotalCount() {
-        //查询SQL
-        sql = "select count(1) from users";
+        //HQL语句
+        String hql = "select count(u.id) from Users u";
+        //开启事务
+        Transaction tx = session.beginTransaction();
         try {
-            //执行查询
-            return queryRunner.query(sql, new ScalarHandler<Long>()).intValue();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            //创建HQL查询
+            Query query = session.createQuery(hql);
+            //返回查询结果
+            return ((Long) query.setCacheable(true).uniqueResult()).intValue();
+        } finally {
+            tx.commit();
         }
     }
 }

@@ -1,5 +1,8 @@
 # BMS(Book Manage System) 图书管理系统
-on Mar 11, 2020
+on 13 Apr 2020
+图书管理系统---Hibernate版本(整合Struts2-Hibernate5框架)
+--------------------------
+on 11 Mar, 2020
 图书管理系统---Struts2版本(基于Struts2框架)
 --------------------------
 on 16 Jul 2019

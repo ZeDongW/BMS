@@ -32,7 +32,7 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
 
     Logger logger = LogManager.getLogger(UsersAction.class.getName());
 
-    private IUsersService service = new UsersServiceImpl();
+    private final IUsersService service = new UsersServiceImpl();
 
     private Users user = new Users();
 
@@ -44,13 +44,13 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
         this.user = user;
     }
 
-    private ActionContext ac = ActionContext.getContext();
+    private final ActionContext ac = ActionContext.getContext();
 
-    private HttpServletRequest req = (HttpServletRequest)ac.get(ServletActionContext.HTTP_REQUEST);
+    private final HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
 
-    private HttpSession session = req.getSession(false);
+    private final HttpSession session = req.getSession(false);
 
-    private ServletContext servletContext= ServletActionContext.getServletContext();
+    private final ServletContext servletContext = ServletActionContext.getServletContext();
 
 
     /**
@@ -117,9 +117,6 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
             message = "5";
             req.setAttribute("message", message);
         } else { //用户名不存在
-            if (user.getRole() == null) {
-                user.setRole("0");
-            }
             if (user.getId() == null) {
                 user.setId(IDUtils.getUuid());
             }

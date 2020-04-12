@@ -3,13 +3,11 @@ package cn.zedongw.bms.dao.impl;
 import cn.zedongw.bms.dao.IBooksDao;
 import cn.zedongw.bms.entity.Books;
 import cn.zedongw.bms.entity.PageBean;
-import cn.zedongw.bms.utils.JdbcUtils;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
+import cn.zedongw.bms.utils.comparator.HibernateUtils;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -24,54 +22,31 @@ import java.util.ArrayList;
 public class BooksDaoImpl implements IBooksDao {
 
     /**
-     * sql
+     * 获取Hiberna的Session
      */
-    private String sql;
-
-    /**
-     * 获取QueryRunner操作对象
-     */
-    private QueryRunner queryRunner = JdbcUtils.getQueryRunner();
+    private final Session session = HibernateUtils.getSession();
 
     @Override
     public void add(Books book) {
-        //SQL
-        sql = "insert into books (id, bookName, bookAuthor, publisher, price, bookNum, publishDate) values (?, ?, ?, ?, ?, ?, ?)";
-        try {
-            //执行更新
-            queryRunner.update(sql, book.getId(), book.getBookName(), book.getBookAuthor(), book.getPublisher(), book.getPrice(),
-                    book.getBookNum(), book.getPublishDate());
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        //保存书本
+        session.save(book);
     }
 
     @Override
     public void delete(String id) {
-        //SQL
-        sql = "delete from books where id = ?";
-        try {
-            //执行更新
-            queryRunner.update(sql, id);
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        //删除书本
+        session.delete(new Books(id));
     }
 
     @Override
     public void update(Books book) {
-        //SQL
-        sql = "update books set bookName = ?, bookAuthor = ?, publisher = ?, price = ?, " +
-                "bookNum = ?, publishDate = ? where id = ?";
+        //开启事务
+        Transaction tx = session.beginTransaction();
         try {
-            //执行更新
-            queryRunner.update(sql, book.getBookName(), book.getBookAuthor(), book.getPublisher(),
-                    book.getPrice(), book.getBookNum(), book.getPublishDate(), book.getId());
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            //更新书本
+            session.update(book);
+        } finally {
+            tx.commit();
         }
     }
 
@@ -102,29 +77,38 @@ public class BooksDaoImpl implements IBooksDao {
 
         //查询起始行
         int index = (currPage - 1) * pageCount;
-
-        //SQL
-        sql = "select * from books limit ?, ?";
+        //开启事务
+        Transaction tx = session.beginTransaction();
         try {
-            //执行查询
-            pb.setPageData((ArrayList<Books>) queryRunner.query(sql, new BeanListHandler<>(Books.class), index, pageCount));
+            //分页查询书本
+            Query query = session.createQuery("from Books");
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // 设置分页参数
+            query.setFirstResult(index);
+            query.setMaxResults(pageCount);
+
+            pb.setPageData((ArrayList<Books>) query.list());
+        } finally {
+            tx.commit();
         }
     }
 
 
     @Override
     public Books findById(String id) {
-        //SQL
-        sql = "select * from books where id = ?";
+        //HQL语句
+        String hql = "from Books where id = ?1";
+        //开启事务
+        Transaction tx = session.beginTransaction();
         try {
-            //执行查询
-            return queryRunner.query(sql, new BeanHandler<>(Books.class), id);
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            //HQL查询
+            Query query = session.createQuery(hql);
+            //设置参数
+            query.setParameter(1, id);
+            //返回查询结果
+            return (Books) query.uniqueResult();
+        } finally {
+            tx.commit();
         }
     }
 
@@ -139,13 +123,17 @@ public class BooksDaoImpl implements IBooksDao {
      */
     @Override
     public int getTotalCount() {
-        //SQL
-        sql = "select count(1) from books";
+        //HQL语句
+        String hql = "select count(b.id) from Books b";
+        //开启事务
+        Transaction tx = session.beginTransaction();
         try {
-            //执行查询
-            return queryRunner.query(sql, new ScalarHandler<Long>()).intValue();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            //创建HQL查询
+            Query query = session.createQuery(hql);
+            //返回查询结果
+            return ((Long) query.setCacheable(true).uniqueResult()).intValue();
+        } finally {
+            tx.commit();
         }
     }
 }

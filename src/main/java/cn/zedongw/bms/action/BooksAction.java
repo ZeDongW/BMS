@@ -4,7 +4,6 @@ import cn.zedongw.bms.entity.Books;
 import cn.zedongw.bms.entity.PageBean;
 import cn.zedongw.bms.service.IBooksService;
 import cn.zedongw.bms.service.impl.BooksServiceImpl;
-import cn.zedongw.bms.utils.IDUtils;
 import cn.zedongw.bms.utils.PageBeanUtils;
 import cn.zedongw.bms.utils.comparator.Sort;
 import com.opensymphony.xwork2.ActionContext;
@@ -29,7 +28,7 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
 
     Logger logger = LogManager.getLogger(BooksAction.class.getName());
 
-    private IBooksService service = new BooksServiceImpl();
+    private final IBooksService service = new BooksServiceImpl();
 
     private Books book = new Books();
 
@@ -41,9 +40,9 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
         this.book = book;
     }
 
-    private ActionContext ac = ActionContext.getContext();
+    private final ActionContext ac = ActionContext.getContext();
 
-    private HttpServletRequest req = (HttpServletRequest)ac.get(ServletActionContext.HTTP_REQUEST);
+    private final HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
 
     @Override
     public Books getModel() {
@@ -59,13 +58,6 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
      */
     public String add(){
         logger.info("========添加书本成功，书本名：{}=========", book.getBookName());
-
-        //书本ID为空
-        if (book.getId() == null) {
-            //设置书本ID
-            book.setId(IDUtils.getUuid());
-        }
-
         //添加书本
         service.addBooks(book);
         return list();

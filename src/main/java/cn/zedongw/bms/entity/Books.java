@@ -61,6 +61,10 @@ public class Books {
         this.publishDate = publishDate;
     }
 
+    public Books(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }

@@ -43,6 +43,10 @@ public class Users {
     public Users() {
     }
 
+    public Users(String id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
