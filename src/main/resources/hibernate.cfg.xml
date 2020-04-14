@@ -6,7 +6,7 @@
     <!-- 通常，一个session-factory节点代表一个数据库 -->
     <session-factory>
         <!-- 1. 数据库连接配置 -->
-        <property name="connection.url">jdbc:mysql://localhost:3306/bms?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=Asia/Shanghai</property>
+        <property name="connection.url">jdbc:mysql:///bms?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=Asia/Shanghai</property>
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="connection.username">zedongw</property>
         <property name="connection.password">ZeDongW@mysql553</property>
