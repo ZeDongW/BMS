@@ -3,7 +3,7 @@ package cn.zedongw.bms.dao.impl;
 import cn.zedongw.bms.dao.IBooksDao;
 import cn.zedongw.bms.entity.Books;
 import cn.zedongw.bms.entity.PageBean;
-import cn.zedongw.bms.utils.comparator.HibernateUtils;
+import cn.zedongw.bms.utils.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;

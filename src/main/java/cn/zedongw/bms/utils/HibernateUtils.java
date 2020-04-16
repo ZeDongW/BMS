@@ -1,4 +1,4 @@
-package cn.zedongw.bms.utils.comparator;
+package cn.zedongw.bms.utils;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
