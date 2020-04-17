@@ -1,10 +1,10 @@
 package cn.zedongw.bms.service.impl;
 
 import cn.zedongw.bms.dao.IUsersDao;
-import cn.zedongw.bms.dao.impl.UsersDaoImpl;
 import cn.zedongw.bms.entity.PageBean;
 import cn.zedongw.bms.entity.Users;
 import cn.zedongw.bms.service.IUsersService;
+import org.springframework.stereotype.Service;
 
 /**
  * @Author ZeDongW
@@ -14,46 +14,50 @@ import cn.zedongw.bms.service.IUsersService;
  * @date ：Created in 7/3/2019 6:44 AM
  * @modified By：
  */
-
+@Service
 public class UsersServiceImpl implements IUsersService {
 
     /**
      * 实例化数据访问层
      */
-    IUsersDao dao = new UsersDaoImpl();
+    private IUsersDao usersDao;
+
+    public void setUsersDao(IUsersDao usersDao) {
+        this.usersDao = usersDao;
+    }
 
     @Override
     public void addUsers(Users user) {
-        dao.add(user);
+        usersDao.add(user);
     }
 
     @Override
     public void deleteUsers(String id) {
-        dao.delete(id);
+        usersDao.delete(id);
     }
 
     @Override
     public void updateUsers(Users user) {
-        dao.update(user);
+        usersDao.update(user);
     }
 
     @Override
     public Users findUsersById(String id) {
-        return dao.findById(id);
+        return usersDao.findById(id);
     }
 
     @Override
     public void findAllUsers(PageBean<Users> pb) {
-        dao.findAll(pb);
+        usersDao.findAll(pb);
     }
 
     @Override
     public Users findByUnAndPwd(String userName, String passWord) {
-        return dao.findByUnAndPwd(userName, passWord);
+        return usersDao.findByUnAndPwd(userName, passWord);
     }
 
     @Override
     public Boolean userNameExists(String userName) {
-        return dao.userNameExists(userName);
+        return usersDao.userNameExists(userName);
     }
 }

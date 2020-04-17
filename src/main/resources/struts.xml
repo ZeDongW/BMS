@@ -10,7 +10,9 @@
     <constant name="struts.custom.i18n.resources" value="msg"/>
     <constant name="struts.ui.theme" value="simple"/>
     <package name="bms" extends="struts-default" strict-method-invocation="false">
-        <action name="users_*" class="cn.zedongw.bms.action.UsersAction" method="{1}">
+
+        <!-- 用户类Action -->
+        <action name="users_*" class="usersAction" method="{1}">
             <result name="login">/WEB-INF/page/login.jsp</result>
             <result name="input">/WEB-INF/page/login.jsp</result>
             <result name="index">/WEB-INF/page/index.jsp</result>
@@ -20,7 +22,8 @@
             <result name="onLineSet">/WEB-INF/page/onLineSet.jsp</result>
         </action>
 
-        <action name="books_*" class="cn.zedongw.bms.action.BooksAction" method="{1}">
+        <!-- 书本类Action -->
+        <action name="books_*" class="booksAction" method="{1}">
             <result name="list" type="redirectAction">books_list</result>
             <result name="booksList">/WEB-INF/page/books.jsp</result>
             <result name="query">/WEB-INF/page/queryBook.jsp</result>

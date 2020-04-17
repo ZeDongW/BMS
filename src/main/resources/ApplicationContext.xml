@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 数据库连接池实例 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="jdbcUrl"
+                  value="jdbc:mysql:///bms?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=Asia/Shanghai"/>
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="user" value="zedongw"/>
+        <property name="password" value="ZeDongW@mysql553"/>
+        <property name="initialPoolSize" value="6"/>
+        <property name="maxPoolSize" value="12"/>
+        <!--<property name="minPoolSize" value="3"/>
+        <property name="unreturnedConnectionTimeout" value="3000"/>
+        <property name="idleConnectionTestPeriod" value="3000"/>
+        <property name="maxStatements" value="10"/>-->
+    </bean>
+
+    <!-- SessionFactory -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <!-- 数据源 -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- hibernate映射文件配置 -->
+        <property name="mappingLocations">
+            <list>
+                <value>classpath*:*.hbm.xml</value>
+            </list>
+        </property>
+        <!-- hibernate配置 -->
+        <property name="hibernateProperties">
+            <props>
+                <!-- 数据库方言配置， hibernate在运行的时候，会根据不同的方言生成符合当前数据库语法的sql -->
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
+                <!-- 2. 其他相关配置 -->
+                <!-- 2.1 显示hibernate在运行时候执行的sql语句 -->
+                <prop key="hibernate.show_sql">true</prop>
+                <!-- 2.2 格式化sql -->
+                <prop key="hibernate.format_sql">true</prop>
+                <!-- 2.3 自动建表  -->
+                <prop key="hibernate.hibernate.hbm2ddl.auto">update</prop>
+                <!--****************** 【二级缓存配置】****************** -->
+                <!-- a.  开启二级缓存 -->
+                <prop key="hibernate.cache.use_second_level_cache">true</prop>
+                <!-- 开启查询缓存 -->
+                <prop key="hibernate.cache.use_query_cache">true</prop>
+                <!-- b. 指定使用哪一个缓存框架(默认提供的) -->
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- Dao -->
+    <bean id="usersDao" class="cn.zedongw.bms.dao.impl.UsersDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="booksDao" class="cn.zedongw.bms.dao.impl.BooksDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!-- Service -->
+    <bean id="usersService" class="cn.zedongw.bms.service.impl.UsersServiceImpl">
+        <property name="usersDao" ref="usersDao"/>
+    </bean>
+    <bean id="booksService" class="cn.zedongw.bms.service.impl.BooksServiceImpl">
+        <property name="booksDao" ref="booksDao"/>
+    </bean>
+
+    <!-- action -->
+    <bean id="usersAction" class="cn.zedongw.bms.action.UsersAction" scope="prototype">
+        <property name="usersService" ref="usersService"/>
+    </bean>
+    <bean id="booksAction" class="cn.zedongw.bms.action.BooksAction" scope="prototype">
+        <property name="booksService" ref="booksService"/>
+    </bean>
+
+    <!-- 事务相关配置 -->
+    <!-- 事务管理器类 -->
+    <bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!-- 事务增强 -->
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="*" read-only="false"/>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="find*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- Aop配置 -->
+    <aop:config>
+        <!-- 切入点表达式 -->
+        <aop:pointcut id="pt" expression=" execution(* cn.zedongw.bms.service.impl.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pt"/>
+    </aop:config>
+</beans>

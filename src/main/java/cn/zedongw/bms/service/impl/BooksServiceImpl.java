@@ -1,10 +1,10 @@
 package cn.zedongw.bms.service.impl;
 
 import cn.zedongw.bms.dao.IBooksDao;
-import cn.zedongw.bms.dao.impl.BooksDaoImpl;
 import cn.zedongw.bms.entity.Books;
 import cn.zedongw.bms.entity.PageBean;
 import cn.zedongw.bms.service.IBooksService;
+import org.springframework.stereotype.Service;
 
 /**
  * @Author ZeDongW
@@ -14,36 +14,40 @@ import cn.zedongw.bms.service.IBooksService;
  * @date ：Created in 7/3/2019 6:33 AM
  * @modified By：
  */
-
+@Service
 public class BooksServiceImpl implements IBooksService {
 
     /**
      * 实例化数据访问层
      */
-    IBooksDao dao = new BooksDaoImpl();
+    private IBooksDao booksDao;
+
+    public void setBooksDao(IBooksDao booksDao) {
+        this.booksDao = booksDao;
+    }
 
     @Override
     public void addBooks(Books book) {
-        dao.add(book);
+        booksDao.add(book);
     }
 
     @Override
     public void deleteBooks(String id) {
-        dao.delete(id);
+        booksDao.delete(id);
     }
 
     @Override
     public void updateBooks(Books book) {
-        dao.update(book);
+        booksDao.update(book);
     }
 
     @Override
     public Books findBooksById(String id) {
-        return dao.findById(id);
+        return booksDao.findById(id);
     }
 
     @Override
     public void findAllBooks(PageBean<Books> pb) {
-        dao.findAll(pb);
+        booksDao.findAll(pb);
     }
 }

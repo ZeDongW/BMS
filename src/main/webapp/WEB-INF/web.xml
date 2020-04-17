@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+    <!-- 自定义过滤器 -->
     <filter>
         <filter-name>loginFilter</filter-name>
         <filter-class>cn.zedongw.bms.filter.LoginFilter</filter-class>
@@ -16,6 +17,7 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!-- Struts2核心过滤器 -->
     <filter>
         <filter-name>struts2</filter-name>
         <filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>
@@ -25,12 +27,22 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!-- 自定义监听器 -->
     <listener>
         <listener-class>cn.zedongw.bms.listener.OnLineListener</listener-class>
     </listener>
-
     <listener>
         <listener-class>cn.zedongw.bms.listener.OffLineListener</listener-class>
+    </listener>
+
+    <!-- Spring配置 -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:ApplicationContext.xml</param-value>
+    </context-param>
+    <!-- Spring监听器 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
     <error-page>

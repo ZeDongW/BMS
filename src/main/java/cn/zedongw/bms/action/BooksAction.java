@@ -3,7 +3,6 @@ package cn.zedongw.bms.action;
 import cn.zedongw.bms.entity.Books;
 import cn.zedongw.bms.entity.PageBean;
 import cn.zedongw.bms.service.IBooksService;
-import cn.zedongw.bms.service.impl.BooksServiceImpl;
 import cn.zedongw.bms.utils.PageBeanUtils;
 import cn.zedongw.bms.utils.comparator.Sort;
 import com.opensymphony.xwork2.ActionContext;
@@ -13,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Controller;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -24,11 +24,16 @@ import java.util.ArrayList;
  * @Date 2020/3/8 0008 19:56
  * @Version V1.0
  **/
+@Controller
 public class BooksAction extends ActionSupport implements ModelDriven<Books> {
 
     Logger logger = LogManager.getLogger(BooksAction.class.getName());
 
-    private final IBooksService service = new BooksServiceImpl();
+    private IBooksService booksService;
+
+    public void setBooksService(IBooksService booksService) {
+        this.booksService = booksService;
+    }
 
     private Books book = new Books();
 
@@ -39,10 +44,6 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
     public void setBook(Books book) {
         this.book = book;
     }
-
-    private final ActionContext ac = ActionContext.getContext();
-
-    private final HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
 
     @Override
     public Books getModel() {
@@ -59,7 +60,7 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
     public String add(){
         logger.info("========添加书本成功，书本名：{}=========", book.getBookName());
         //添加书本
-        service.addBooks(book);
+        booksService.addBooks(book);
         return list();
     }
 
@@ -70,8 +71,12 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
      *@Param []
      *@Return java.lang.String
      */
-    public String list(){
+    public String list() {
         logger.info("========获取所有书本=========");
+
+        ActionContext ac = ActionContext.getContext();
+
+        HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
 
         //实例化分页查询对象
         PageBean booksPb = new PageBean<>();
@@ -83,7 +88,7 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
         PageBeanUtils.initPageBean(req, booksPb, booksPb2);
 
         //获取所有书本
-        service.findAllBooks(booksPb);
+        booksService.findAllBooks(booksPb);
 
         //获取排序参数
         String sort = req.getParameter("sort");
@@ -112,7 +117,7 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
     public String delete(){
         logger.info("=========根据ID删除书本，书本ID：{}=============", book.getId());
         //删除书本
-        service.deleteBooks(book.getId());
+        booksService.deleteBooks(book.getId());
         return list();
 
     }
@@ -128,7 +133,7 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
         logger.info("===================根据ID查找书本，书本ID:{}===========", book.getId());
 
         //获取书本id
-        Books bookInfo = service.findBooksById(book.getId());
+        Books bookInfo = booksService.findBooksById(book.getId());
         if (bookInfo != null) {
             BeanUtils.copyProperties(bookInfo, book);
         }
@@ -145,7 +150,7 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
     public String update(){
         logger.info("=========根据ID更新书本， 书ID：{}===========", book.getId());
         //更新书本
-        service.updateBooks(book);
+        booksService.updateBooks(book);
         return "list";
     }
 }

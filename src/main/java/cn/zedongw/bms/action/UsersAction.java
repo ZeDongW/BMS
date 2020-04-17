@@ -3,7 +3,6 @@ package cn.zedongw.bms.action;
 import cn.zedongw.bms.entity.PageBean;
 import cn.zedongw.bms.entity.Users;
 import cn.zedongw.bms.service.IUsersService;
-import cn.zedongw.bms.service.impl.UsersServiceImpl;
 import cn.zedongw.bms.utils.IDUtils;
 import cn.zedongw.bms.utils.PageBeanUtils;
 import cn.zedongw.bms.utils.comparator.Sort;
@@ -14,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Controller;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -28,11 +28,16 @@ import java.util.Set;
  * @Date 2020/3/1 0001 18:24
  * @Version V1.0
  **/
+@Controller
 public class UsersAction extends ActionSupport implements ModelDriven<Users> {
 
     Logger logger = LogManager.getLogger(UsersAction.class.getName());
 
-    private final IUsersService service = new UsersServiceImpl();
+    private IUsersService usersService;
+
+    public void setUsersService(IUsersService usersService) {
+        this.usersService = usersService;
+    }
 
     private Users user = new Users();
 
@@ -46,11 +51,6 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
 
     private final ActionContext ac = ActionContext.getContext();
 
-    private final HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
-
-    private final HttpSession session = req.getSession(false);
-
-    private final ServletContext servletContext = ServletActionContext.getServletContext();
 
 
     /**
@@ -72,26 +72,32 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
      *@Param []
      *@Return java.lang.String
      */
-    public String login(){
+    public String login() {
         logger.info("=======================用户登录,用户名：{}======================", user.getUserName());
 
-        session.setAttribute("loginUser",user);
-        Set<Users> onLineSet =  (Set<Users>) servletContext.getAttribute("onLineSet");
+        HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
+
+        HttpSession session = req.getSession(false);
+
+        ServletContext servletContext = ServletActionContext.getServletContext();
+
+        session.setAttribute("loginUser", user);
+        Set<Users> onLineSet = (Set<Users>) servletContext.getAttribute("onLineSet");
         if (onLineSet != null) {
             onLineSet.add(user);
         }
         return "index";
     }
 
-    public void validateLogin(){
-        if (service.userNameExists(user.getUserName())){
-            user = service.findByUnAndPwd(user.getUserName(), user.getPassWord());
+    public void validateLogin() {
+        if (usersService.userNameExists(user.getUserName())) {
+            user = usersService.findByUnAndPwd(user.getUserName(), user.getPassWord());
 
             if (user == null) {
-                super.addFieldError("passWord","密码错误，请输入正确密码");
+                super.addFieldError("passWord", "密码错误，请输入正确密码");
             }
         } else {
-            super.addFieldError("userName","用户名不存在");
+            super.addFieldError("userName", "用户名不存在");
         }
     }
 
@@ -102,7 +108,7 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
      *@Param []
      *@Return java.lang.String
      */
-    public String regist(){
+    public String regist() {
 
         //获取参数
         String userName = user.getUserName();
@@ -111,9 +117,12 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
 
         //返回消息
         String message;
+        HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
+
+        HttpSession session = req.getSession(false);
 
         //用户名存在
-        if(service.userNameExists(userName)){
+        if (usersService.userNameExists(userName)) {
             message = "5";
             req.setAttribute("message", message);
         } else { //用户名不存在
@@ -121,7 +130,7 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
                 user.setId(IDUtils.getUuid());
             }
             //调用业务逻辑层插入数据
-            service.addUsers(user);
+            usersService.addUsers(user);
             String success = "1";
             req.setAttribute("success", success);
         }
@@ -138,8 +147,12 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
     public String logOut() {
         logger.info("===============================用户注销===============================");
 
+        HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
+
+        HttpSession session = req.getSession(false);
+
         //Session不为空
-        if(session != null){
+        if (session != null) {
             //销毁Session
             session.invalidate();
         }
@@ -157,7 +170,7 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
     public String delete(){
         logger.info("=====================删除用户，用户ID：{}=======================", user.getId());
         //删除用户
-        service.deleteUsers(user.getId());
+        usersService.deleteUsers(user.getId());
 
         return list();
     }
@@ -172,7 +185,7 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
     public String query(){
         logger.info("==================根据id查找用户，用户ID：{}=====================", user.getId());
         //根据id查找用户
-        Users userInfo = service.findUsersById(user.getId());
+        Users userInfo = usersService.findUsersById(user.getId());
         if (userInfo != null) {
             BeanUtils.copyProperties(userInfo, user);
         }
@@ -189,7 +202,7 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
     public String update() {
         logger.info("================更新用户，用id:{}===============", user.getId());
         //更新用户
-        service.updateUsers(user);
+        usersService.updateUsers(user);
         return list();
     }
 
@@ -200,8 +213,12 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
      *@Param []
      *@Return java.lang.String
      */
-    public String list(){
+    public String list() {
         logger.info("================获取所有用户===============");
+
+        HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
+
+        HttpSession session = req.getSession(false);
 
         //实例化分页查询对象
         PageBean<Users> usersPb = new PageBean<>();
@@ -213,7 +230,7 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
         PageBeanUtils.initPageBean(req, usersPb, usersPb2);
 
         //获取所有用户
-        service.findAllUsers(usersPb);
+        usersService.findAllUsers(usersPb);
 
         //获取排序信息
         String sort = req.getParameter("sort");
