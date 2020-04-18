@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,14 +39,10 @@ public class LoginFilter implements Filter {
         //初始化放行列表
         String ignoresParam = filterConfig.getInitParameter("ignores");
         String[] ignoreArray = ignoresParam.split(",");
-        for (String s : ignoreArray) {
-            ignoreSet.add(s);
-        }
+        Collections.addAll(ignoreSet, ignoreArray);
         String repeatLoginParam = filterConfig.getInitParameter("repeatLogin");
         String[] repeatLoginArray = repeatLoginParam.split(",");
-        for (String s : repeatLoginArray) {
-            repeatLoginSet.add(s);
-        }
+        Collections.addAll(repeatLoginSet, repeatLoginArray);
     }
 
     @Override
