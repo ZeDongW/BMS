@@ -29,7 +29,7 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
 
     Logger logger = LogManager.getLogger(BooksAction.class.getName());
 
-    private IBooksService service = new BooksServiceImpl();
+    private final IBooksService service = new BooksServiceImpl();
 
     private Books book = new Books();
 
@@ -41,9 +41,9 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
         this.book = book;
     }
 
-    private ActionContext ac = ActionContext.getContext();
+    private final ActionContext ac = ActionContext.getContext();
 
-    private HttpServletRequest req = (HttpServletRequest)ac.get(ServletActionContext.HTTP_REQUEST);
+    private final HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
 
     @Override
     public Books getModel() {
@@ -106,7 +106,7 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
         booksPb.setPageData(booksList);
 
         //将集合放入请求中
-        req.setAttribute("booksPb", booksPb);
+        req.getSession().setAttribute("booksPb", booksPb);
         return "booksList";
     }
 

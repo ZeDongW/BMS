@@ -32,46 +32,53 @@
         <th><s:a href='users_list?sort=userName'><s:text name="userName"/></s:a></th>
         <c:choose>
             <c:when test="${'admin' eq loginUser.userName}">
-                <th><s:text name="option"/></th>
+        <th><s:text name="option"/></th>
+    </tr>
+    <s:if test='%{#session.usersPb.pageData.size() != 0}'>
+        <s:iterator value="%{#session.usersPb.pageData}" var="user">
+            <tr>
+                <td><s:property value="#user.id"/></td>
+                <td><s:property value="#user.userName"/></td>
+                <td><s:a href='users_query?id=%{#user.id}'><s:text name="passWordUpdate"/></s:a>&nbsp;
+                    <s:a href='users_delete?id=%{#user.id}'><s:text name="delete"/></s:a></td>
+            </tr>
+        </s:iterator>
+    </s:if>
+    </c:when>
+    <c:otherwise>
+        </tr>
+        <s:if test="%{#session.usersPb.pageData.size() != 0}">
+            <s:iterator value="%{#session.usersPb.pageData}" var="user">
+                <tr>
+                    <td><s:property value="#user.id"/></td>
+                    <td><s:property value="#user.userName"/></td>
                 </tr>
-                <s:if test='%{#request.usersPb.pageData.size() != 0}'>
-                    <s:iterator value="%{#request.usersPb.pageData}" var="user">
-                        <tr>
-                            <td><s:property value="#user.id"/></td>
-                            <td><s:property value="#user.userName"/></td>
-                            <td><s:a href='users_query?id=%{#user.id}'><s:text name="passWordUpdate"/></s:a>&nbsp;
-                                <s:a href='users_delete?id=%{#user.id}'><s:text name="delete"/></s:a></td>
-                        </tr>
-                    </s:iterator>
-                </s:if>
-            </c:when>
-            <c:otherwise>
-                </tr>
-                <s:if test="%{#request.usersPb.pageData.size() != 0}">
-                    <s:iterator value="%{#request.usersPb.pageData}" var="user">
-                        <tr>
-                            <td><s:property value="#user.id"/></td>
-                            <td><s:property value="#user.userName"/></td>
-                        </tr>
-                    </s:iterator>
-                </s:if>
-            </c:otherwise>
-        </c:choose>
+            </s:iterator>
+        </s:if>
+    </c:otherwise>
+    </c:choose>
     <tr>
         <td colspan="3" align="center">
-            <s:text name="pageCount"/><s:textfield type="text" style="width: 20px" value='%{#request.usersPb.pageCount}' onkeyup="this.value=this.value.replace(/\D/g,'')" onblur='checkPageCount()' id='pageCount'/>&nbsp;&nbsp;
+            <s:text name="pageCount"/><s:textfield type="text" style="width: 20px" value='%{#session.usersPb.pageCount}'
+                                                   onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                                   onblur='checkPageCount()' id='pageCount'/>&nbsp;&nbsp;
             <s:text name="current"/>
-            <s:textfield style="width: 20px" value='%{#request.usersPb.currPage}' onkeyup="this.value=this.value.replace(/\D/g,'')" onblur='checkPageCount()' id='currPage'/>
-            /<s:property value="%{#request.usersPb.totalPage}"/><s:text name="page"/>&nbsp;&nbsp;
+            <s:textfield style="width: 20px" value='%{#session.usersPb.currPage}'
+                         onkeyup="this.value=this.value.replace(/\D/g,'')" onblur='checkPageCount()' id='currPage'/>
+            /<s:property value="%{#session.usersPb.totalPage}"/><s:text name="page"/>&nbsp;&nbsp;
             <c:choose>
                 <c:when test="${usersPb.currPage  == 1 && usersPb.currPage != usersPb.totalPage}">
                     <s:text name="first"/>&nbsp;&nbsp;<s:text name="previous"/>
-                    <s:a href="users_list?currPage=%{#request.usersPb.currPage+1}&pageCount=%{#request.usersPb.pageCount}"><s:text name="next"/> </s:a>&nbsp;&nbsp;
-                    <s:a href="users_list?currPage=%{#request.usersPb.totalPage}&pageCount=%{#request.usersPb.pageCount}"><s:text name="last"/></s:a>
+                    <s:a href="users_list?currPage=%{#session.usersPb.currPage+1}&pageCount=%{#session.usersPb.pageCount}"><s:text
+                            name="next"/> </s:a>&nbsp;&nbsp;
+                    <s:a href="users_list?currPage=%{#session.usersPb.totalPage}&pageCount=%{#session.usersPb.pageCount}"><s:text
+                            name="last"/></s:a>
                 </c:when>
                 <c:when test="${usersPb.currPage == usersPb.totalPage && usersPb.currPage  != 1}">
-                    <s:a href="users_list?currPage=1&pageCount=%{#request.usersPb.pageCount}"><s:text name="first"/></s:a>&nbsp;&nbsp;
-                    <s:a href="users_list?currPage=%{#request.usersPb.currPage-1}&pageCount=%{#request.usersPb.pageCount}"><s:text name="previous"/> </s:a>&nbsp;&nbsp;
+                    <s:a href="users_list?currPage=1&pageCount=%{#session.usersPb.pageCount}"><s:text
+                            name="first"/></s:a>&nbsp;&nbsp;
+                    <s:a href="users_list?currPage=%{#session.usersPb.currPage-1}&pageCount=%{#session.usersPb.pageCount}"><s:text
+                            name="previous"/> </s:a>&nbsp;&nbsp;
                     <s:text name="next"/>&nbsp;&nbsp;<s:text name="last"/>
                 </c:when>
                 <c:when test="${usersPb.currPage == usersPb.totalPage && usersPb.currPage  == 1}">
@@ -79,10 +86,14 @@
                     <s:text name="next"/>&nbsp;&nbsp;<s:text name="last"/>
                 </c:when>
                 <c:otherwise>
-                    <s:a href="users_list?currPage=1&pageCount=%{#request.usersPb.pageCount}"><s:text name="first"/></s:a>&nbsp;&nbsp;
-                    <s:a href="users_list?currPage=%{#request.usersPb.currPage-1}&pageCount=%{#request.usersPb.pageCount}"><s:text name="previous"/> </s:a>&nbsp;&nbsp;
-                    <s:a href="users_list?currPage=%{#request.usersPb.currPage+1}&pageCount=%{#request.usersPb.pageCount}"><s:text name="next"/> </s:a>&nbsp;&nbsp;
-                    <s:a href="users_list?currPage=%{#request.usersPb.totalPage}&pageCount=%{#request.usersPb.pageCount}"><s:text name="last"/></s:a>
+                    <s:a href="users_list?currPage=1&pageCount=%{#session.usersPb.pageCount}"><s:text
+                            name="first"/></s:a>&nbsp;&nbsp;
+                    <s:a href="users_list?currPage=%{#session.usersPb.currPage-1}&pageCount=%{#session.usersPb.pageCount}"><s:text
+                            name="previous"/> </s:a>&nbsp;&nbsp;
+                    <s:a href="users_list?currPage=%{#session.usersPb.currPage+1}&pageCount=%{#session.usersPb.pageCount}"><s:text
+                            name="next"/> </s:a>&nbsp;&nbsp;
+                    <s:a href="users_list?currPage=%{#session.usersPb.totalPage}&pageCount=%{#session.usersPb.pageCount}"><s:text
+                            name="last"/></s:a>
                 </c:otherwise>
                 </c:choose>
             </td>

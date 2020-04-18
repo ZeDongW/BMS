@@ -32,7 +32,7 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
 
     Logger logger = LogManager.getLogger(UsersAction.class.getName());
 
-    private IUsersService service = new UsersServiceImpl();
+    private final IUsersService service = new UsersServiceImpl();
 
     private Users user = new Users();
 
@@ -44,13 +44,13 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
         this.user = user;
     }
 
-    private ActionContext ac = ActionContext.getContext();
+    private final ActionContext ac = ActionContext.getContext();
 
-    private HttpServletRequest req = (HttpServletRequest)ac.get(ServletActionContext.HTTP_REQUEST);
+    private final HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
 
-    private HttpSession session = req.getSession(false);
+    private final HttpSession session = req.getSession(false);
 
-    private ServletContext servletContext= ServletActionContext.getServletContext();
+    private final ServletContext servletContext = ServletActionContext.getServletContext();
 
 
     /**
@@ -210,7 +210,7 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
         PageBean<Users> usersPb = new PageBean<>();
 
         //从request中获取分页实体
-        PageBean<Users> usersPb2 = (PageBean<Users>) req.getSession().getAttribute("usersPb");
+        PageBean<Users> usersPb2 = (PageBean<Users>) session.getAttribute("usersPb");
 
         //封装分页实体
         PageBeanUtils.initPageBean(req, usersPb, usersPb2);
@@ -231,7 +231,7 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
         usersPb.setPageData(usersList);
 
         //将用户封装到request中
-        req.setAttribute("usersPb", usersPb);
+        session.setAttribute("usersPb", usersPb);
         return "usersList";
     }
 
