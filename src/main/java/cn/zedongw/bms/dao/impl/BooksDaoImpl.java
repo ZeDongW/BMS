@@ -5,7 +5,6 @@ import cn.zedongw.bms.entity.Books;
 import cn.zedongw.bms.entity.PageBean;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 
@@ -17,7 +16,6 @@ import java.util.ArrayList;
  * @date ：Created in 2019/6/2 0002 20:16
  * @modified By：
  */
-@Repository
 public class BooksDaoImpl implements IBooksDao {
 
     /**

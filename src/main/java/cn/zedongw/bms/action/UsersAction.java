@@ -13,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Controller;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +27,6 @@ import java.util.Set;
  * @Date 2020/3/1 0001 18:24
  * @Version V1.0
  **/
-@Controller
 public class UsersAction extends ActionSupport implements ModelDriven<Users> {
 
     Logger logger = LogManager.getLogger(UsersAction.class.getName());

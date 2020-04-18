@@ -12,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Controller;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -24,7 +23,6 @@ import java.util.ArrayList;
  * @Date 2020/3/8 0008 19:56
  * @Version V1.0
  **/
-@Controller
 public class BooksAction extends ActionSupport implements ModelDriven<Books> {
 
     Logger logger = LogManager.getLogger(BooksAction.class.getName());

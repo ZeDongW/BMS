@@ -4,7 +4,6 @@ import cn.zedongw.bms.dao.IUsersDao;
 import cn.zedongw.bms.entity.PageBean;
 import cn.zedongw.bms.entity.Users;
 import cn.zedongw.bms.service.IUsersService;
-import org.springframework.stereotype.Service;
 
 /**
  * @Author ZeDongW
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
  * @date ：Created in 7/3/2019 6:44 AM
  * @modified By：
  */
-@Service
 public class UsersServiceImpl implements IUsersService {
 
     /**

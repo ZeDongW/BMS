@@ -21,10 +21,10 @@
         <property name="password" value="ZeDongW@mysql553"/>
         <property name="initialPoolSize" value="6"/>
         <property name="maxPoolSize" value="12"/>
-        <!--<property name="minPoolSize" value="3"/>
+        <property name="minPoolSize" value="3"/>
         <property name="unreturnedConnectionTimeout" value="3000"/>
         <property name="idleConnectionTestPeriod" value="3000"/>
-        <property name="maxStatements" value="10"/>-->
+        <property name="maxStatements" value="10"/>
     </bean>
 
     <!-- SessionFactory -->
@@ -61,18 +61,18 @@
     </bean>
 
     <!-- Dao -->
-    <bean id="usersDao" class="cn.zedongw.bms.dao.impl.UsersDaoImpl">
+    <bean id="usersDao" class="cn.zedongw.bms.dao.impl.UsersDaoImpl" scope="singleton">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
-    <bean id="booksDao" class="cn.zedongw.bms.dao.impl.BooksDaoImpl">
+    <bean id="booksDao" class="cn.zedongw.bms.dao.impl.BooksDaoImpl" scope="singleton">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
     <!-- Service -->
-    <bean id="usersService" class="cn.zedongw.bms.service.impl.UsersServiceImpl">
+    <bean id="usersService" class="cn.zedongw.bms.service.impl.UsersServiceImpl" scope="singleton">
         <property name="usersDao" ref="usersDao"/>
     </bean>
-    <bean id="booksService" class="cn.zedongw.bms.service.impl.BooksServiceImpl">
+    <bean id="booksService" class="cn.zedongw.bms.service.impl.BooksServiceImpl" scope="singleton">
         <property name="booksDao" ref="booksDao"/>
     </bean>
 
