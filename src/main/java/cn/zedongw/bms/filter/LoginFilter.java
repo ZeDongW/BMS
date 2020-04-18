@@ -1,6 +1,5 @@
 package cn.zedongw.bms.filter;
 
-import cn.zedongw.bms.action.BooksAction;
 import cn.zedongw.bms.entity.Users;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,7 +26,7 @@ public class LoginFilter implements Filter {
     /**
      * 放行列表
      */
-    private Set<String> ignoreSet = new HashSet<>();
+    private final Set<String> ignoreSet = new HashSet<>();
 
 
     Logger logger = LogManager.getLogger(LoginFilter.class.getName());
