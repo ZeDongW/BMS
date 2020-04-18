@@ -14,6 +14,7 @@ import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.BeanUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 
 /**
@@ -48,14 +49,20 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
         return book;
     }
 
+    private final ActionContext ac = ActionContext.getContext();
+
+    private final HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
+
+    private final HttpSession session = req.getSession(false);
+
     /**
-     *@Description 添加书本
-     *@Author ZeDongW
-     *@Date 2020/3/8 0008 20:04
-     *@Param []
-     *@Return java.lang.String
+     * @Description 添加书本
+     * @Author ZeDongW
+     * @Date 2020/3/8 0008 20:04
+     * @Param []
+     * @Return java.lang.String
      */
-    public String add(){
+    public String add() {
         logger.info("========添加书本成功，书本名：{}=========", book.getBookName());
         //添加书本
         booksService.addBooks(book);
@@ -72,15 +79,11 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
     public String list() {
         logger.info("========获取所有书本=========");
 
-        ActionContext ac = ActionContext.getContext();
-
-        HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
-
         //实例化分页查询对象
         PageBean booksPb = new PageBean<>();
 
         //从Request中获取分页实体
-        PageBean<Books> booksPb2 = (PageBean<Books>) req.getSession().getAttribute("booksPb");
+        PageBean<Books> booksPb2 = (PageBean<Books>) session.getAttribute("booksPb");
 
         //封装分页实体
         PageBeanUtils.initPageBean(req, booksPb, booksPb2);
@@ -101,7 +104,7 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
         booksPb.setPageData(booksList);
 
         //将集合放入请求中
-        req.setAttribute("booksPb", booksPb);
+        session.setAttribute("booksPb", booksPb);
         return "booksList";
     }
 

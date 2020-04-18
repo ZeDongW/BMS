@@ -49,14 +49,18 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
 
     private final ActionContext ac = ActionContext.getContext();
 
+    private final HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
 
+    private final HttpSession session = req.getSession(false);
+
+    private final ServletContext servletContext = ServletActionContext.getServletContext();
 
     /**
-     *@Description struts2模型驱动
-     *@Author ZeDongW
-     *@Date 2020/3/1 0001 19:50
-     *@Param []
-     *@Return cn.zedongw.entity.Users
+     * @Description struts2模型驱动
+     * @Author ZeDongW
+     * @Date 2020/3/1 0001 19:50
+     * @Param []
+     * @Return cn.zedongw.entity.Users
      */
     @Override
     public Users getModel() {
@@ -72,12 +76,6 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
      */
     public String login() {
         logger.info("=======================用户登录,用户名：{}======================", user.getUserName());
-
-        HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
-
-        HttpSession session = req.getSession(false);
-
-        ServletContext servletContext = ServletActionContext.getServletContext();
 
         session.setAttribute("loginUser", user);
         Set<Users> onLineSet = (Set<Users>) servletContext.getAttribute("onLineSet");
@@ -115,9 +113,6 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
 
         //返回消息
         String message;
-        HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
-
-        HttpSession session = req.getSession(false);
 
         //用户名存在
         if (usersService.userNameExists(userName)) {
@@ -144,10 +139,6 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
      */
     public String logOut() {
         logger.info("===============================用户注销===============================");
-
-        HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
-
-        HttpSession session = req.getSession(false);
 
         //Session不为空
         if (session != null) {
@@ -214,15 +205,11 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
     public String list() {
         logger.info("================获取所有用户===============");
 
-        HttpServletRequest req = (HttpServletRequest) ac.get(ServletActionContext.HTTP_REQUEST);
-
-        HttpSession session = req.getSession(false);
-
         //实例化分页查询对象
         PageBean<Users> usersPb = new PageBean<>();
 
         //从request中获取分页实体
-        PageBean<Users> usersPb2 = (PageBean<Users>) req.getSession().getAttribute("usersPb");
+        PageBean<Users> usersPb2 = (PageBean<Users>) session.getAttribute("usersPb");
 
         //封装分页实体
         PageBeanUtils.initPageBean(req, usersPb, usersPb2);
@@ -243,7 +230,7 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
         usersPb.setPageData(usersList);
 
         //将用户封装到request中
-        req.setAttribute("usersPb", usersPb);
+        session.setAttribute("usersPb", usersPb);
         return "usersList";
     }
 
