@@ -35,6 +35,10 @@
         <listener-class>cn.zedongw.bms.listener.OffLineListener</listener-class>
     </listener>
 
+    <listener>
+        <listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
+    </listener>
+
     <!-- Spring配置 -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
