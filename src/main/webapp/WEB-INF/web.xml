@@ -10,6 +10,10 @@
             <param-name>ignores</param-name>
             <param-value>login,login.jsp,regist,logOut,.js,.css</param-value>
         </init-param>
+        <init-param>
+            <param-name>repeatLogin</param-name>
+            <param-value>users_login,login.jsp,users_regist,users_toLogin,BMS/</param-value>
+        </init-param>
     </filter>
     <filter-mapping>
         <filter-name>loginFilter</filter-name>
