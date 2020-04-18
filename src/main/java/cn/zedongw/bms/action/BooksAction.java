@@ -98,7 +98,7 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
         booksPb.setPageData(booksList);
 
         //将集合放入请求中
-        req.setAttribute("booksPb", booksPb);
+        req.getSession().setAttribute("booksPb", booksPb);
         return "booksList";
     }
 

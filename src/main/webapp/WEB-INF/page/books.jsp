@@ -31,14 +31,14 @@
         <th><s:a href='books_list?sort=bookId'><s:text name="ID"/></s:a></th>
         <th><s:a href='books_list?sort=bookName'><s:text name="bookName"/></s:a></th>
         <th><s:a href='books_list?sort=bookAuthor'><s:text name="author"/></s:a></th>
-        <th><s:a href='books_list?sort=bookPublisher'><s:text name="publisher" /></s:a></th>
+        <th><s:a href='books_list?sort=bookPublisher'><s:text name="publisher"/></s:a></th>
         <th><s:a href='books_list?sort=bookPrice'><s:text name="price"/></s:a></th>
         <th><s:a href='books_list?sort=bookNum'><s:text name="bookNum"/></s:a></th>
         <th><s:a href='books_list?sort=bookPublishDate'><s:text name="publishDate"/></s:a></th>
         <th><s:text name="option"/></th>
     </tr>
-    <s:if test="%{#request.booksPb.pageData.size()!=0}">
-        <s:iterator value="%{#request.booksPb.pageData}" var="book">
+    <s:if test="%{#session.booksPb.pageData.size()!=0}">
+        <s:iterator value="%{#session.booksPb.pageData}" var="book">
             <tr>
                 <td><s:property value="#book.id"/></td>
                 <td><s:property value="#book.bookName"/></td>
@@ -59,22 +59,26 @@
     <tr>
         <td colspan="8" align="center">
             <s:text name="pageCount"/>
-            <s:textfield style="width: 20px" value='%{#request.booksPb.pageCount}' onkeyup="this.value=this.value.replace(/\D/g,'')" onblur='checkPageCount()' id='pageCount'/>&nbsp;&nbsp;
+            <s:textfield style="width: 20px" value='%{#session.booksPb.pageCount}'
+                         onkeyup="this.value=this.value.replace(/\D/g,'')" onblur='checkPageCount()' id='pageCount'/>&nbsp;&nbsp;
             <s:text name="current"/>
-            <s:textfield style="width: 20px" value='%{#request.booksPb.currPage}' onkeyup="this.value=this.value.replace(/\D/g,'')" onblur='checkPageCount()' id='currPage'/>
-            /<s:property value="#request.booksPb.totalPage"/>
+            <s:textfield style="width: 20px" value='%{#session.booksPb.currPage}'
+                         onkeyup="this.value=this.value.replace(/\D/g,'')" onblur='checkPageCount()' id='currPage'/>
+            /<s:property value="#session.booksPb.totalPage"/>
             <s:text name="page"/>&nbsp;&nbsp;
             <c:choose>
                 <c:when test="${booksPb.currPage  == 1 && booksPb.currPage != booksPb.totalPage}">
                     <s:text name="first"/>&nbsp;&nbsp;<s:text name="previous"/>
-                    <s:a href="books_list?currPage=%{#request.booksPb.currPage+1}&pageCount=%{#request.booksPb.pageCount}">
+                    <s:a href="books_list?currPage=%{#session.booksPb.currPage+1}&pageCount=%{#session.booksPb.pageCount}">
                         <s:text name="next"/> </s:a>&nbsp;&nbsp;
-                    <s:a href="books_list?currPage=%{#request.booksPb.totalPage}&pageCount=%{#request.booksPb.pageCount}">
+                    <s:a href="books_list?currPage=%{#session.booksPb.totalPage}&pageCount=%{#session.booksPb.pageCount}">
                         <s:text name="last"/></s:a>
                 </c:when>
                 <c:when test="${booksPb.currPage == booksPb.totalPage && booksPb.currPage  != 1 }">
-                    <s:a href="books_list?currPage=1&pageCount=%{#request.booksPb.pageCount}"><s:text name="first"/></s:a>&nbsp;&nbsp;
-                    <s:a href="books_list?currPage=%{#request.booksPb.currPage-1}&pageCount=%{#request.booksPb.pageCount}"><s:text name="previous"/> </s:a>&nbsp;&nbsp;
+                    <s:a href="books_list?currPage=1&pageCount=%{#session.booksPb.pageCount}"><s:text
+                            name="first"/></s:a>&nbsp;&nbsp;
+                    <s:a href="books_list?currPage=%{#session.booksPb.currPage-1}&pageCount=%{#session.booksPb.pageCount}"><s:text
+                            name="previous"/> </s:a>&nbsp;&nbsp;
                     <s:text name="next"/>&nbsp;&nbsp;<s:text name="last"/>
                 </c:when>
                 <c:when test="${booksPb.currPage == booksPb.totalPage && booksPb.currPage  == 1 }">
@@ -82,10 +86,14 @@
                     <s:text name="next"/>&nbsp;&nbsp;<s:text name="last"/>
                 </c:when>
                 <c:otherwise>
-                    <s:a href="books_list?currPage=1&pageCount=%{#request.booksPb.pageCount}"><s:text name="first"/></s:a>&nbsp;&nbsp;
-                    <s:a href="books_list?currPage=%{#request.booksPb.currPage-1}&pageCount=%{#request.booksPb.pageCount}"><s:text name="previous"/> </s:a>&nbsp;&nbsp;
-                    <s:a href="books_list?currPage=%{#request.booksPb.currPage+1}&pageCount=%{#request.booksPb.pageCount}"><s:text name="next"/> </s:a>&nbsp;&nbsp;
-                    <s:a href="books_list?currPage=%{#request.booksPb.totalPage}&pageCount=%{#request.booksPb.pageCount}"><s:text name="last"/></s:a>
+                    <s:a href="books_list?currPage=1&pageCount=%{#session.booksPb.pageCount}"><s:text
+                            name="first"/></s:a>&nbsp;&nbsp;
+                    <s:a href="books_list?currPage=%{#session.booksPb.currPage-1}&pageCount=%{#session.booksPb.pageCount}"><s:text
+                            name="previous"/> </s:a>&nbsp;&nbsp;
+                    <s:a href="books_list?currPage=%{#session.booksPb.currPage+1}&pageCount=%{#session.booksPb.pageCount}"><s:text
+                            name="next"/> </s:a>&nbsp;&nbsp;
+                    <s:a href="books_list?currPage=%{#session.booksPb.totalPage}&pageCount=%{#session.booksPb.pageCount}"><s:text
+                            name="last"/></s:a>
                 </c:otherwise>
                 </c:choose>
             </td>

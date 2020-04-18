@@ -207,7 +207,7 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
         PageBean<Users> usersPb = new PageBean<>();
 
         //从request中获取分页实体
-        PageBean<Users> usersPb2 = (PageBean<Users>) req.getSession().getAttribute("usersPb");
+        PageBean<Users> usersPb2 = (PageBean<Users>) session.getAttribute("usersPb");
 
         //封装分页实体
         PageBeanUtils.initPageBean(req, usersPb, usersPb2);
@@ -228,7 +228,7 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
         usersPb.setPageData(usersList);
 
         //将用户封装到request中
-        req.setAttribute("usersPb", usersPb);
+        session.setAttribute("usersPb", usersPb);
         return "usersList";
     }
 
