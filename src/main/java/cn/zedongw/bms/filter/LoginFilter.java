@@ -29,6 +29,10 @@ public class LoginFilter implements Filter {
     private final Set<String> ignoreSet = new HashSet<>();
 
 
+    private final static String PATH_SEPARATOR = "/";
+    private final Set<String> repeatLoginSet = new HashSet<>();
+
+
     Logger logger = LogManager.getLogger(LoginFilter.class.getName());
 
     @Override
@@ -38,6 +42,11 @@ public class LoginFilter implements Filter {
         String[] ignoreArray = ignoresParam.split(",");
         for (String s : ignoreArray) {
             ignoreSet.add(s);
+        }
+        String repeatLoginParam = filterConfig.getInitParameter("repeatLogin");
+        String[] repeatLoginArray = repeatLoginParam.split(",");
+        for (String s : repeatLoginArray) {
+            repeatLoginSet.add(s);
         }
     }
 
@@ -57,26 +66,33 @@ public class LoginFilter implements Filter {
 
         logger.info("=================================================请求URI:{}===================================================", requestUri);
 
-        //符合忽略规则，直接放行
-        if (isIgnore(requestUri)) {
-            //直接放行
-            filterChain.doFilter(req, resp);
-        } else {
-            //获取Session对象
-            HttpSession session = req.getSession(false);
-            //会话不为空
-            if (session != null) {
-                //从会话中获取用户
-                Users loginUser = (Users) session.getAttribute("loginUser");
-                //用户不为空
-                if (loginUser != null) {
-                    //放行
-                    filterChain.doFilter(req, resp);
+        //判断是否登录
+        //获取Session对象
+        HttpSession session = req.getSession(false);
+        //会话不为空
+        if (session != null) {
+            //从会话中获取用户
+            Users loginUser = (Users) session.getAttribute("loginUser");
+            //用户不为空
+            if (loginUser != null) {
+                //判断是否重复登录
+                if (isCondition(requestUri, repeatLoginSet) || PATH_SEPARATOR.equals(requestUri)) {
+                    resp.sendRedirect(req.getContextPath() + "/users_index");
                     return;
                 }
+                //放行
+                filterChain.doFilter(req, resp);
+                return;
             }
+        }
+
+        if (isCondition(requestUri, ignoreSet)) {
+            //直接放行
+            filterChain.doFilter(req, resp);
+            return;
+        } else {
             //未登录，转发到登陆页面
-           resp.sendRedirect(req.getContextPath() + "/users_toLogin");
+            resp.sendRedirect(req.getContextPath() + "/users_toLogin");
         }
     }
 
@@ -86,14 +102,19 @@ public class LoginFilter implements Filter {
     }
 
     /**
-     * 是否匹配忽略规则
+     * Description: 判断是否满足条件
      *
-     * @param requestUri
-     * @return
+     * @param requestUri 1
+     * @param set        2
+     * @throws
+     * @methodName: isCondition
+     * @return: boolean
+     * @author: ZeDongW
+     * @date: 2020/4/18 0018 22:11
      */
-    private boolean isIgnore(String requestUri) {
-        for (String ignore : ignoreSet) {
-            if (requestUri.endsWith(ignore)) {
+    private boolean isCondition(String requestUri, Set<String> set) {
+        for (String s : set) {
+            if (requestUri.endsWith(s)) {
                 return true;
             }
         }
