@@ -1,4 +1,7 @@
 # BMS(Book Manage System) 图书管理系统
+on 18 Apr 2020
+图书管理系统---Spring_annotation版本(整合Struts2-Spring5-Hibernate5框架，Spring 使用注解)
+--------------------------
 on 17 Apr 2020
 图书管理系统---Spring_XML版本(整合Struts2-Spring5-Hibernate5框架，Spring 使用XML配置)
 --------------------------

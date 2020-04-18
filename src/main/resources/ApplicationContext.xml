@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
-
-
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx.xsd
-       http://www.springframework.org/schema/aop
-       http://www.springframework.org/schema/aop/spring-aop.xsd">
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
 
+    <!-- 开启注解扫描 -->
+    <context:component-scan base-package="cn.zedongw.bms"/>
     <!-- 数据库连接池实例 -->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="jdbcUrl"
@@ -60,30 +60,6 @@
         </property>
     </bean>
 
-    <!-- Dao -->
-    <bean id="usersDao" class="cn.zedongw.bms.dao.impl.UsersDaoImpl" scope="singleton">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-    <bean id="booksDao" class="cn.zedongw.bms.dao.impl.BooksDaoImpl" scope="singleton">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
-    <!-- Service -->
-    <bean id="usersService" class="cn.zedongw.bms.service.impl.UsersServiceImpl" scope="singleton">
-        <property name="usersDao" ref="usersDao"/>
-    </bean>
-    <bean id="booksService" class="cn.zedongw.bms.service.impl.BooksServiceImpl" scope="singleton">
-        <property name="booksDao" ref="booksDao"/>
-    </bean>
-
-    <!-- action -->
-    <bean id="usersAction" class="cn.zedongw.bms.action.UsersAction" scope="prototype">
-        <property name="usersService" ref="usersService"/>
-    </bean>
-    <bean id="booksAction" class="cn.zedongw.bms.action.BooksAction" scope="prototype">
-        <property name="booksService" ref="booksService"/>
-    </bean>
-
     <!-- 事务相关配置 -->
     <!-- 事务管理器类 -->
     <bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
@@ -91,19 +67,6 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <!-- 事务增强 -->
-    <tx:advice id="txAdvice" transaction-manager="txManager">
-        <tx:attributes>
-            <tx:method name="*" read-only="false"/>
-            <tx:method name="get*" read-only="true"/>
-            <tx:method name="find*" read-only="true"/>
-        </tx:attributes>
-    </tx:advice>
-
-    <!-- Aop配置 -->
-    <aop:config>
-        <!-- 切入点表达式 -->
-        <aop:pointcut id="pt" expression=" execution(* cn.zedongw.bms.service.impl.*.*(..))"/>
-        <aop:advisor advice-ref="txAdvice" pointcut-ref="pt"/>
-    </aop:config>
+    <!-- 事务管理注解 -->
+    <tx:annotation-driven transaction-manager="txManager"/>
 </beans>

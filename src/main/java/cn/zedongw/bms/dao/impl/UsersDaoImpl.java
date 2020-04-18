@@ -6,6 +6,8 @@ import cn.zedongw.bms.entity.Users;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 
@@ -17,6 +19,7 @@ import java.util.ArrayList;
  * @date ：Created in 2019/6/2 0002 20:13
  * @modified By：
  */
+@Repository
 public class UsersDaoImpl implements IUsersDao {
 
     /**
@@ -24,6 +27,7 @@ public class UsersDaoImpl implements IUsersDao {
      */
     private SessionFactory sessionFactory;
 
+    @Autowired
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }

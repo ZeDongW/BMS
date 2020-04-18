@@ -4,6 +4,10 @@ import cn.zedongw.bms.dao.IBooksDao;
 import cn.zedongw.bms.entity.Books;
 import cn.zedongw.bms.entity.PageBean;
 import cn.zedongw.bms.service.IBooksService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Author ZeDongW
@@ -13,6 +17,8 @@ import cn.zedongw.bms.service.IBooksService;
  * @date ：Created in 7/3/2019 6:33 AM
  * @modified By：
  */
+@Service
+@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 public class BooksServiceImpl implements IBooksService {
 
     /**
@@ -20,6 +26,7 @@ public class BooksServiceImpl implements IBooksService {
      */
     private IBooksDao booksDao;
 
+    @Autowired
     public void setBooksDao(IBooksDao booksDao) {
         this.booksDao = booksDao;
     }

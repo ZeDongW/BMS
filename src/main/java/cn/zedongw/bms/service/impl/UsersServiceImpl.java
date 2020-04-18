@@ -4,6 +4,10 @@ import cn.zedongw.bms.dao.IUsersDao;
 import cn.zedongw.bms.entity.PageBean;
 import cn.zedongw.bms.entity.Users;
 import cn.zedongw.bms.service.IUsersService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Author ZeDongW
@@ -13,6 +17,8 @@ import cn.zedongw.bms.service.IUsersService;
  * @date ：Created in 7/3/2019 6:44 AM
  * @modified By：
  */
+@Service
+@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 public class UsersServiceImpl implements IUsersService {
 
     /**
@@ -20,6 +26,7 @@ public class UsersServiceImpl implements IUsersService {
      */
     private IUsersDao usersDao;
 
+    @Autowired
     public void setUsersDao(IUsersDao usersDao) {
         this.usersDao = usersDao;
     }
