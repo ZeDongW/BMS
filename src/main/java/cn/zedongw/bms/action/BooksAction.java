@@ -4,7 +4,6 @@ import cn.zedongw.bms.entity.Books;
 import cn.zedongw.bms.entity.PageBean;
 import cn.zedongw.bms.service.IBooksService;
 import cn.zedongw.bms.utils.PageBeanUtils;
-import cn.zedongw.bms.utils.comparator.Sort;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
@@ -19,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName BooksAction
@@ -104,7 +105,33 @@ public class BooksAction extends ActionSupport implements ModelDriven<Books> {
         ArrayList<Books> booksList = booksPb.getPageData();
 
         //给书本排序
-        Sort.sort(booksList, sort);
+        if (sort != null) {
+            switch (sort){
+                case "bookAuthor" :
+                    booksList = (ArrayList<Books>) booksList.stream().sorted(Comparator.comparing(Books::getBookAuthor)).collect(Collectors.toList());
+                    break;
+                case "bookId" :
+                    booksList = (ArrayList<Books>) booksList.stream().sorted(Comparator.comparing(Books::getId)).collect(Collectors.toList());
+                    break;
+                case "bookName" :
+                    booksList = (ArrayList<Books>) booksList.stream().sorted(Comparator.comparing(Books::getBookName)).collect(Collectors.toList());
+                    break;
+                case "bookNum" :
+                    booksList = (ArrayList<Books>) booksList.stream().sorted(Comparator.comparing(Books::getBookNum)).collect(Collectors.toList());
+                    break;
+                case "bookPrice" :
+                    booksList = (ArrayList<Books>) booksList.stream().sorted(Comparator.comparing(Books::getPrice)).collect(Collectors.toList());
+                    break;
+                case "bookPublishDate" :
+                    booksList = (ArrayList<Books>) booksList.stream().sorted(Comparator.comparing(Books::getPublishDate)).collect(Collectors.toList());
+                    break;
+                case "bookPublisher" :
+                    booksList = (ArrayList<Books>) booksList.stream().sorted(Comparator.comparing(Books::getPublisher)).collect(Collectors.toList());
+                    break;
+                default:
+                    break;
+            }
+        }
 
         //将排序后的对象放入分页查询对象中
         booksPb.setPageData(booksList);

@@ -5,7 +5,6 @@ import cn.zedongw.bms.entity.Users;
 import cn.zedongw.bms.service.IUsersService;
 import cn.zedongw.bms.utils.IDUtils;
 import cn.zedongw.bms.utils.PageBeanUtils;
-import cn.zedongw.bms.utils.comparator.Sort;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
@@ -21,7 +20,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName UsersAction
@@ -230,7 +231,19 @@ public class UsersAction extends ActionSupport implements ModelDriven<Users> {
         ArrayList<Users> usersList = usersPb.getPageData();
 
         //给用户排序
-        Sort.sort(usersList, sort);
+        //给书本排序
+        if (sort != null) {
+            switch (sort){
+                case "userId" :
+                    usersList = (ArrayList<Users>) usersList.stream().sorted(Comparator.comparing(Users::getId)).collect(Collectors.toList());
+                    break;
+                case "userName" :
+                    usersList = (ArrayList<Users>) usersList.stream().sorted(Comparator.comparing(Users::getUserName)).collect(Collectors.toList());
+                    break;
+                default:
+                    break;
+            }
+        }
 
         //将排序后的对象放入分页查询对象中
         usersPb.setPageData(usersList);
